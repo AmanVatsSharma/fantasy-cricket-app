@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Fantasy Cricket",
+    "slug": "fantasy-cricket",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": false,
+    "splash": {
+      "backgroundColor": "#080810"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#080810"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "main": "index.tsx",
+    "platforms": ["web", "ios", "android"]
+  }
+}
