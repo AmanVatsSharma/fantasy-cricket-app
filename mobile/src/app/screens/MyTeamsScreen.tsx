@@ -231,6 +231,43 @@ const TeamCard: React.FC<{ team: typeof MOCK_TEAMS[number] }> = ({ team }) => (
 );
 
 /* ------------------------------------------------------------------ *
+ *  Sub-tab content
+ * ------------------------------------------------------------------ */
+
+// Gold-bordered referral banner. A decorative 🎁 is floated
+// bottom-right behind a faint gold halo to mirror the clone image.
+const ReferralBanner: React.FC = () => (
+  <View style={rb.root} accessible accessibilityRole="text" accessibilityLabel="Refer and Earn, invite friends and earn 100 rupees">
+    <View style={rb.row}>
+      <Text style={rb.copyIcon}>📋</Text>
+      <View style={rb.txtCol}>
+        <Text style={rb.title}>Refer & Earn</Text>
+        <Text style={rb.sub}>Invite friends and earn ₹100</Text>
+      </View>
+    </View>
+    <View style={rb.giftHalo} pointerEvents="none">
+      <Text style={rb.giftIcon}>🎁</Text>
+    </View>
+  </View>
+);
+
+// Centered empty state used by the Joined Contests and Saved Teams
+// sub-tabs. Renders a dimmed message and a single CTA button. onPress
+// is left for Task 6 to wire to a toast.
+const EmptySubTab: React.FC<{
+  message: string;
+  cta: string;
+  onPress: () => void;
+}> = ({ message, cta, onPress }) => (
+  <View style={es.root}>
+    <Text style={es.msg}>{message}</Text>
+    <TouchableOpacity style={es.cta} onPress={onPress} activeOpacity={0.7}>
+      <Text style={es.ctaTxt}>{cta}</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+/* ------------------------------------------------------------------ *
  *  Main screen
  * ------------------------------------------------------------------ */
 
@@ -241,21 +278,38 @@ export const MyTeamsScreen: React.FC = () => {
     <View style={{ flex: 1, backgroundColor: '#080810' }}>
       <ModernHeader />
       <SubTabBar active={activeSubTab} onChange={setActiveSubTab} />
-      <StatsBar stats={MOCK_STATS} />
-      <ScrollView
-        contentContainerStyle={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <MatchInfoCard match={MOCK_MATCH} />
-        <FlatList
-          data={MOCK_TEAMS}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <TeamCard team={item} />}
-          scrollEnabled={false}
-          contentContainerStyle={{ paddingBottom: 100 }}
-          showsVerticalScrollIndicator={false}
+      {activeSubTab === 'myTeams' ? (
+        <>
+          <StatsBar stats={MOCK_STATS} />
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 100 }}
+            showsVerticalScrollIndicator={false}
+          >
+            <MatchInfoCard match={MOCK_MATCH} />
+            <FlatList
+              data={MOCK_TEAMS}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <TeamCard team={item} />}
+              scrollEnabled={false}
+              contentContainerStyle={{ paddingBottom: 20 }}
+              showsVerticalScrollIndicator={false}
+            />
+            <ReferralBanner />
+          </ScrollView>
+        </>
+      ) : activeSubTab === 'joinedContests' ? (
+        <EmptySubTab
+          message="You haven't joined any contests from this match"
+          cta="Browse Contests"
+          onPress={() => {}}
         />
-      </ScrollView>
+      ) : (
+        <EmptySubTab
+          message="No saved teams yet"
+          cta="Create Team"
+          onPress={() => {}}
+        />
+      )}
     </View>
   );
 };
@@ -548,6 +602,85 @@ const tc = StyleSheet.create({
   ctaTxt: {
     color: '#fff',
     fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+});
+
+const rb = StyleSheet.create({
+  root: {
+    backgroundColor: 'rgba(236,189,21,0.1)',
+    borderColor: '#ECBD15',
+    borderWidth: 1,
+    borderRadius: 16,
+    padding: 16,
+    marginHorizontal: 12,
+    marginBottom: 20,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  copyIcon: {
+    fontSize: 22,
+  },
+  txtCol: {
+    flex: 1,
+  },
+  title: {
+    color: '#ECBD15',
+    fontSize: 16,
+    fontWeight: '900',
+    marginBottom: 2,
+  },
+  sub: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  giftHalo: {
+    position: 'absolute',
+    right: -10,
+    bottom: -10,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(236,189,21,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  giftIcon: {
+    fontSize: 36,
+    opacity: 0.6,
+  },
+});
+
+const es = StyleSheet.create({
+  root: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  msg: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  cta: {
+    backgroundColor: '#ECBD15',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 24,
+  },
+  ctaTxt: {
+    color: '#080810',
+    fontSize: 14,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
