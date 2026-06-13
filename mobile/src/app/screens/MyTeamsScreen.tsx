@@ -18,7 +18,7 @@
  * Author:      Aman Vats Sharma
  * Last-updated: 2026-06-13
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -104,6 +104,63 @@ const SubTabBar: React.FC<{
   </View>
 );
 
+// Summary metrics row sitting just under the sub-tab bar. Gold values
+// draw the eye; uppercase dim labels keep the bar readable without
+// competing with the countdowns further down.
+const StatsBar: React.FC<{ stats: typeof MOCK_STATS }> = ({ stats }) => (
+  <View style={sb.root}>
+    <View style={sb.item}>
+      <Text style={sb.value}>{stats.teams}</Text>
+      <Text style={sb.label}>TEAMS</Text>
+    </View>
+    <View style={sb.divider} />
+    <View style={sb.item}>
+      <Text style={sb.value}>₹{stats.totalWinning}</Text>
+      <Text style={sb.label}>TOTAL WINNING</Text>
+    </View>
+    <View style={sb.divider} />
+    <View style={sb.item}>
+      <Text style={sb.value}>{stats.contestsJoined}</Text>
+      <Text style={sb.label}>CONTESTS JOINED</Text>
+    </View>
+    <View style={sb.divider} />
+    <View style={sb.item}>
+      <Text style={sb.value}>{stats.winningTeams}</Text>
+      <Text style={sb.label}>WINNING TEAMS</Text>
+    </View>
+  </View>
+);
+
+// Compact match info card with a live ticking countdown. The card
+// spans the row with team1 / VS / team2 and the time-left line below
+// in the brand gold. Timer self-cleans on unmount.
+const MatchInfoCard: React.FC<{ match: typeof MOCK_MATCH }> = ({ match }) => {
+  const [timeLeft, setTimeLeft] = useState({ h: '00', m: '00', s: '00' });
+  useEffect(() => {
+    const tick = () => {
+      const diff = Math.max(0, new Date(match.matchDateTime).getTime() - Date.now());
+      const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+      const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+      const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+      setTimeLeft({ h, m, s });
+    };
+    tick();
+    const i = setInterval(tick, 1000);
+    return () => clearInterval(i);
+  }, [match.matchDateTime]);
+
+  return (
+    <View style={mic.root}>
+      <Text style={mic.team}>{match.team1Short}</Text>
+      <View style={mic.vsWrap}>
+        <Text style={mic.vs}>VS</Text>
+      </View>
+      <Text style={mic.team}>{match.team2Short}</Text>
+      <Text style={mic.countdown}>{timeLeft.h}h {timeLeft.m}m {timeLeft.s}s</Text>
+    </View>
+  );
+};
+
 /* ------------------------------------------------------------------ *
  *  Main screen
  * ------------------------------------------------------------------ */
@@ -115,6 +172,8 @@ export const MyTeamsScreen: React.FC = () => {
     <View style={{ flex: 1, backgroundColor: '#080810' }}>
       <ModernHeader />
       <SubTabBar active={activeSubTab} onChange={setActiveSubTab} />
+      <StatsBar stats={MOCK_STATS} />
+      <MatchInfoCard match={MOCK_MATCH} />
     </View>
   );
 };
@@ -218,6 +277,71 @@ const st = StyleSheet.create({
   },
   tabTxtActive: {
     color: '#fff',
+  },
+});
+
+const sb = StyleSheet.create({
+  root: {
+    flexDirection: 'row',
+    backgroundColor: '#14141f',
+    marginHorizontal: 12,
+    borderRadius: 12,
+    paddingVertical: 12,
+    marginBottom: 8,
+  },
+  item: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  value: {
+    color: '#ECBD15',
+    fontSize: 18,
+    fontWeight: '900',
+    marginBottom: 2,
+  },
+  label: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 9,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  divider: {
+    width: 1,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+  },
+});
+
+const mic = StyleSheet.create({
+  root: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: '#14141f',
+    marginHorizontal: 12,
+    borderRadius: 12,
+    paddingVertical: 12,
+    marginBottom: 8,
+  },
+  team: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  vsWrap: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  vs: {
+    color: '#CE404D',
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 2,
+  },
+  countdown: {
+    color: '#ECBD15',
+    fontSize: 14,
+    fontWeight: '800',
   },
 });
 
