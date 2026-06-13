@@ -224,7 +224,7 @@ Add to `MainTabs` Tab.Navigator:
 | `+ Create Team` pill | `useToast().show('Team creation coming soon')` |
 | `✏️` edit per team | `useToast().show('Edit team: <name>')` |
 | `⋮` more per team | `useToast().show('Menu: Edit / Copy / Share')` |
-| `🏆 View Contest` per team | `nav.navigate('ContestLobby', { contestId: team.id })` |
+| `🏆 View Contest` per team | `nav.navigate('ContestLobby', { matchId: 'm1', matchName: 'CHE vs KOL', team1: 'CHE', team2: 'KOL', team1Color: '#F7C42E', team2Color: '#3F2E84' })` (matches existing `ContestLobby` param shape per [ContestLobbyScreen.tsx:12](mobile/src/app/screens/ContestLobbyScreen.tsx#L12); mock values are hardcoded since the screen is reached from a static card) |
 | Tab `MYCONTESTS` | renders `MyContestsScreen` (extracted from current HomeScreen flow — but since it already exists as a stack screen, we can wrap it) |
 | Tab `WALLET` | renders `AccountScreen` (existing) |
 | Tab `MORE` | toast "More options coming soon" |
@@ -304,4 +304,6 @@ No store changes, no new dependencies, no package.json changes.
 
 ## 12. Open Questions
 
-None — all clarifying questions resolved during brainstorming. The single risk is the "My Contests" tab since the existing screen is reached via a stack route, not as a tab; the simplest solution is to mount `MyContestsScreen` directly inside the `MYCONTESTS` `Tab.Screen`, which is allowed by React Navigation.
+None — all clarifying questions resolved during brainstorming. Two risks to flag:
+1. **My Contests tab** — the existing screen is reached via a stack route, not as a tab. Solution: mount `MyContestsScreen` directly inside the `MYCONTESTS` `Tab.Screen`. React Navigation allows the same component to be a tab and a stack target.
+2. **Hardcoded navigation params for View Contest** — when the user is on the team card, we don't have the live `ContestLobby` params for *that* team, so we hardcode the mock match params. A future iteration could enrich `FantasyTeam` with `contestId` and look up the params, but that's out of scope.
