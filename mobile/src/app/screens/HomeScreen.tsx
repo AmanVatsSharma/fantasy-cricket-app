@@ -1354,9 +1354,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'nowrap',
     gap: 16,
+    alignSelf: 'stretch',
   },
   matchTeam: {
-    minWidth: 90,
+    minWidth: 84,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
@@ -1381,7 +1382,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   matchCenter: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 10,
     minWidth: 100,
   },
