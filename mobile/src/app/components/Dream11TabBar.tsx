@@ -32,10 +32,11 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Svg, Path, Circle, Rect } from 'react-native-svg';
 
 export const TAB_ICONS = [
-  { name: 'HOME',      label: 'Home' },
-  { name: 'WATCHLIVE', label: 'Watch Live' },
-  { name: 'CLUBS',     label: 'Clubs' },
-  { name: 'ACCOUNT',   label: 'Account' },
+  { name: 'HOME',       label: 'Home' },
+  { name: 'MYCONTESTS', label: 'My Contests' },
+  { name: 'MYTEAMS',    label: 'My Teams' },
+  { name: 'WALLET',     label: 'Wallet' },
+  { name: 'MORE',       label: 'More' },
 ];
 
 // SVG icons for tab bar
@@ -52,83 +53,42 @@ export const TabIcon = ({ name, focused }: { name: string; focused: boolean }) =
       </Svg>
     );
   }
-  if (name === 'WATCHLIVE') {
+  if (name === 'MYCONTESTS') {
     return (
       <Svg width={22} height={22} viewBox="0 0 24 24">
-        <Path d="M12 4V2" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Path d="M4.93 4.93L3.51 3.51" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Path d="M2 12H4" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Circle cx="12" cy="12" r="3" stroke={c} strokeWidth={sw} fill="none" />
-        <Path d="M12 15C14.2091 15 16 13.2091 16 11" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Path d="M12 18C16.4183 18 20 14.4183 20 10" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Path d="M12 21C18.6274 21 24 15.6274 24 9" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Path d="M8 6L10 8" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Path d="M6 8L8 10" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
+        <Path d="M7 4 H17 V10 C17 13 14.5 15 12 15 C9.5 15 7 13 7 10 V4 Z" stroke={c} strokeWidth={sw} strokeLinejoin="round" fill="none" />
+        <Path d="M7 6 H4 C4 8.5 5 10 7 10" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
+        <Path d="M17 6 H20 C20 8.5 19 10 17 10" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
+        <Rect x="9" y="15" width="6" height="3" stroke={c} strokeWidth={sw} fill={c} />
+        <Rect x="8" y="18" width="8" height="2" rx="1" stroke={c} strokeWidth={sw} fill={c} />
       </Svg>
     );
   }
-  if (name === 'CLUBS') {
+  if (name === 'MYTEAMS') {
     return (
       <Svg width={22} height={22} viewBox="0 0 24 24">
-        <Circle cx="9" cy="7" r="3" stroke={c} strokeWidth={sw} fill="none" />
-        <Path d="M3 19C3 15.6863 5.68629 13 9 13" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
-        <Circle cx="16" cy="7" r="3" stroke={c} strokeWidth={sw} fill="none" />
-        <Path d="M21 19C21 15.6863 18.3137 13 15 13" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
+        <Path d="M12 3 C10 6 8 8 8 12 C8 14 9 15 12 17 C15 15 16 14 16 12 C16 8 14 6 12 3" stroke={c} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </Svg>
     );
   }
-  // ACCOUNT — person silhouette (also used inside floating button at 24x24)
+  if (name === 'WALLET') {
+    return (
+      <Svg width={22} height={22} viewBox="0 0 24 24">
+        <Rect x="6" y="18" width="12" height="4" rx="2" stroke={c} strokeWidth={sw} fill="none" />
+        <Rect x="6" y="14" width="12" height="2" stroke={c} strokeWidth={sw} fill="none" />
+        <Path d="M10 14 C10 12 9 11 11 11 C12 11 13 12 13 13" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
+      </Svg>
+    );
+  }
+  // MORE — 3 dots
   return (
     <Svg width={22} height={22} viewBox="0 0 24 24">
-      <Circle cx="12" cy="7" r="4" stroke={c} strokeWidth={sw} fill="none" />
-      <Path d="M4 21V19C4 16.7909 5.79086 15 8 15H16C18.2091 15 20 16.7909 20 19V21" stroke={c} strokeWidth={sw} strokeLinecap="round" fill="none" />
+      <Circle cx="6" cy="12" r="1.5" fill={c} />
+      <Circle cx="12" cy="12" r="1.5" fill={c} />
+      <Circle cx="18" cy="12" r="1.5" fill={c} />
     </Svg>
   );
 };
-
-// Floating Account button — raised above the tab bar
-const FloatingAccountButton = ({ isActive, onPress }: { isActive: boolean; onPress: () => void }) => (
-  <View style={fb.wrapper}>
-    <TouchableOpacity
-      style={[fb.button, isActive && fb.buttonActive]}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
-      <Svg width={24} height={24} viewBox="0 0 24 24">
-        <Circle cx="12" cy="7" r="4" stroke="#fff" strokeWidth={2} fill="none" />
-        <Path d="M4 21V19C4 16.7909 5.79086 15 8 15H16C18.2091 15 20 16.7909 20 19V21" stroke="#fff" strokeWidth={2} strokeLinecap="round" fill="none" />
-      </Svg>
-    </TouchableOpacity>
-  </View>
-);
-
-const fb = StyleSheet.create({
-  wrapper: {
-    position: 'absolute',
-    bottom: 18,
-    left: '50%',
-    transform: [{ translateX: -24 }],
-    marginTop: -20,
-    zIndex: 10,
-  },
-  button: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#CE404D',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#CE404D',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 12,
-    elevation: 12,
-  },
-  buttonActive: {
-    backgroundColor: '#A02030',
-    shadowOpacity: 0.8,
-  },
-});
 
 export const Dream11TabBar = ({ state, descriptors, navigation }: any) => {
   const focusedIndex = state.index;
@@ -136,19 +96,7 @@ export const Dream11TabBar = ({ state, descriptors, navigation }: any) => {
   return (
     <View style={t.bar}>
       {/* Red glow dot above active tab — rendered behind the bar */}
-      <View style={[t.redGlow, { left: `${(focusedIndex + 0.5) * 25}%` }]} />
-
-      {/* Navigation arrows — bottom left */}
-      <View style={t.navArrows}>
-        <Text style={t.navArrow}>{'<'}</Text>
-        <Text style={t.navArrow}>{'>'}</Text>
-      </View>
-
-      {/* Floating raised Account button — positioned over ACCOUNT tab */}
-      <FloatingAccountButton
-        isActive={focusedIndex === 3}
-        onPress={() => navigation.navigate('ACCOUNT')}
-      />
+      <View style={[t.redGlow, { left: `${(focusedIndex + 0.5) * 20}%` }]} />
 
       {state.routes.map((route: any, index: number) => {
         const isFocused = state.index === index;
@@ -178,8 +126,8 @@ const t = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     backgroundColor: '#0d0d12',
-    paddingBottom: 24,
-    paddingTop: 12,
+    paddingBottom: 20,
+    paddingTop: 8,
     paddingHorizontal: 4,
     borderTopWidth: 1.5,
     borderTopColor: '#CE404D',
@@ -203,18 +151,6 @@ const t = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 6,
     elevation: 8,
-  },
-  navArrows: {
-    position: 'absolute',
-    left: 12,
-    bottom: 28,
-    flexDirection: 'row',
-    gap: 12,
-  },
-  navArrow: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 16,
-    fontWeight: '300',
   },
   tab: {
     flex: 1,
