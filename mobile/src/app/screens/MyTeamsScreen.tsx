@@ -34,6 +34,8 @@ import {
   ContestType,
 } from '../data/mockTeams';
 import { useDrawer } from '../../..';
+import { useToast } from '../components/Toast';
+import { useNavigation } from '@react-navigation/native';
 
 /* ------------------------------------------------------------------ *
  *  Sub-components
@@ -178,57 +180,81 @@ const CONTEST_PILL_BG: Record<ContestType, string> = {
 // type pill, edit / more actions, team name + rank, player avatar
 // strip with +5 overflow, points / winning summary, and a CTA button
 // that will be wired to navigation in Task 6.
-const TeamCard: React.FC<{ team: typeof MOCK_TEAMS[number] }> = ({ team }) => (
-  <View style={tc.root}>
-    {/* Top row: contest type pill + edit/more actions */}
-    <View style={tc.topRow}>
-      <View style={[tc.pill, { backgroundColor: CONTEST_PILL_BG[team.contestType] }]}>
-        <Text style={tc.pillTxt}>{team.contestType.toUpperCase()}</Text>
-      </View>
-      <View style={tc.actions}>
-        <TouchableOpacity style={tc.actionBtn} activeOpacity={0.7}>
-          <Text style={tc.actionIcon}>✏️</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tc.actionBtn} activeOpacity={0.7}>
-          <Text style={tc.actionIcon}>⋮</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+const TeamCard: React.FC<{ team: typeof MOCK_TEAMS[number] }> = ({ team }) => {
+  const { show } = useToast();
+  const nav = useNavigation();
 
-    {/* Name + rank row */}
-    <View style={tc.nameRow}>
-      <Text style={tc.teamName}>{team.name}</Text>
-      <Text style={tc.rank}>{team.rank}</Text>
-    </View>
-
-    {/* Avatars + points/winning row */}
-    <View style={tc.avatarsRow}>
-      <View style={tc.avatarStrip}>
-        {team.players.slice(0, 6).map((p) => (
-          <View key={p.id} style={[tc.avatar, { backgroundColor: p.color }]}>
-            <Text style={tc.avatarTxt}>{p.initials}</Text>
-          </View>
-        ))}
-        <View style={tc.overflowChip}>
-          <Text style={tc.overflowTxt}>+5</Text>
+  return (
+    <View style={tc.root}>
+      {/* Top row: contest type pill + edit/more actions */}
+      <View style={tc.topRow}>
+        <View style={[tc.pill, { backgroundColor: CONTEST_PILL_BG[team.contestType] }]}>
+          <Text style={tc.pillTxt}>{team.contestType.toUpperCase()}</Text>
+        </View>
+        <View style={tc.actions}>
+          <TouchableOpacity
+            style={tc.actionBtn}
+            onPress={() => show(`Edit team: ${team.name}`)}
+            activeOpacity={0.7}
+          >
+            <Text style={tc.actionIcon}>✏️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={tc.actionBtn}
+            onPress={() => show('Menu: Edit / Copy / Share')}
+            activeOpacity={0.7}
+          >
+            <Text style={tc.actionIcon}>⋮</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={tc.metricsCol}>
-        <Text style={tc.points}>{team.points}</Text>
-        {team.winning > 0 && (
-          <Text style={tc.winning}>₹{team.winning}</Text>
-        )}
+
+      {/* Name + rank row */}
+      <View style={tc.nameRow}>
+        <Text style={tc.teamName}>{team.name}</Text>
+        <Text style={tc.rank}>{team.rank}</Text>
+      </View>
+
+      {/* Avatars + points/winning row */}
+      <View style={tc.avatarsRow}>
+        <View style={tc.avatarStrip}>
+          {team.players.slice(0, 6).map((p) => (
+            <View key={p.id} style={[tc.avatar, { backgroundColor: p.color }]}>
+              <Text style={tc.avatarTxt}>{p.initials}</Text>
+            </View>
+          ))}
+          <View style={tc.overflowChip}>
+            <Text style={tc.overflowTxt}>+5</Text>
+          </View>
+        </View>
+        <View style={tc.metricsCol}>
+          <Text style={tc.points}>{team.points}</Text>
+          {team.winning > 0 && (
+            <Text style={tc.winning}>₹{team.winning}</Text>
+          )}
+        </View>
+      </View>
+
+      {/* CTA row */}
+      <View style={tc.ctaRow}>
+        <TouchableOpacity
+          style={tc.ctaBtn}
+          onPress={() => nav.navigate('ContestLobby', {
+            matchId: 'm1',
+            matchName: 'CHE vs KOL',
+            team1: 'CHE',
+            team2: 'KOL',
+            team1Color: '#F7C42E',
+            team2Color: '#3F2E84',
+          } as any)}
+          activeOpacity={0.7}
+        >
+          <Text style={tc.ctaTxt}>🏆 VIEW CONTEST</Text>
+        </TouchableOpacity>
       </View>
     </View>
-
-    {/* CTA row */}
-    <View style={tc.ctaRow}>
-      <TouchableOpacity style={tc.ctaBtn} activeOpacity={0.7}>
-        <Text style={tc.ctaTxt}>🏆 VIEW CONTEST</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+  );
+};
 
 /* ------------------------------------------------------------------ *
  *  Sub-tab content
@@ -273,6 +299,8 @@ const EmptySubTab: React.FC<{
 
 export const MyTeamsScreen: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<SubTab>('myTeams');
+  const { show } = useToast();
+  const nav = useNavigation();
 
   return (
     <View style={{ flex: 1, backgroundColor: '#080810' }}>
@@ -301,13 +329,13 @@ export const MyTeamsScreen: React.FC = () => {
         <EmptySubTab
           message="You haven't joined any contests from this match"
           cta="Browse Contests"
-          onPress={() => {}}
+          onPress={() => show('Browse contests coming soon')}
         />
       ) : (
         <EmptySubTab
           message="No saved teams yet"
           cta="Create Team"
-          onPress={() => {}}
+          onPress={() => show('Create team coming soon')}
         />
       )}
     </View>
