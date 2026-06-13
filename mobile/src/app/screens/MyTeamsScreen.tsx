@@ -25,8 +25,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  ScrollView,
 } from 'react-native';
-import { MOCK_TEAMS, MOCK_STATS, MOCK_MATCH } from '../data/mockTeams';
+import {
+  MOCK_TEAMS,
+  MOCK_STATS,
+  MOCK_MATCH,
+  ContestType,
+} from '../data/mockTeams';
 import { useDrawer } from '../../..';
 
 /* ------------------------------------------------------------------ *
@@ -159,6 +165,71 @@ const MatchInfoCard: React.FC<{ match: typeof MOCK_MATCH }> = ({ match }) => {
   );
 };
 
+// Per-contest color map for the type pill in the top-left of each card.
+const CONTEST_PILL_BG: Record<ContestType, string> = {
+  'Mega Contest': '#10B981',
+  'Head to Head': '#9333EA',
+  'Mini Grand': '#3B82F6',
+  'Hot Contest': '#F97316',
+  'Beginner Contest': '#D946EF',
+};
+
+// Card representation of a single fantasy team. Renders the contest
+// type pill, edit / more actions, team name + rank, player avatar
+// strip with +5 overflow, points / winning summary, and a CTA button
+// that will be wired to navigation in Task 6.
+const TeamCard: React.FC<{ team: typeof MOCK_TEAMS[number] }> = ({ team }) => (
+  <View style={tc.root}>
+    {/* Top row: contest type pill + edit/more actions */}
+    <View style={tc.topRow}>
+      <View style={[tc.pill, { backgroundColor: CONTEST_PILL_BG[team.contestType] }]}>
+        <Text style={tc.pillTxt}>{team.contestType.toUpperCase()}</Text>
+      </View>
+      <View style={tc.actions}>
+        <TouchableOpacity style={tc.actionBtn} activeOpacity={0.7}>
+          <Text style={tc.actionIcon}>✏️</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={tc.actionBtn} activeOpacity={0.7}>
+          <Text style={tc.actionIcon}>⋮</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+
+    {/* Name + rank row */}
+    <View style={tc.nameRow}>
+      <Text style={tc.teamName}>{team.name}</Text>
+      <Text style={tc.rank}>{team.rank}</Text>
+    </View>
+
+    {/* Avatars + points/winning row */}
+    <View style={tc.avatarsRow}>
+      <View style={tc.avatarStrip}>
+        {team.players.slice(0, 6).map((p) => (
+          <View key={p.id} style={[tc.avatar, { backgroundColor: p.color }]}>
+            <Text style={tc.avatarTxt}>{p.initials}</Text>
+          </View>
+        ))}
+        <View style={tc.overflowChip}>
+          <Text style={tc.overflowTxt}>+5</Text>
+        </View>
+      </View>
+      <View style={tc.metricsCol}>
+        <Text style={tc.points}>{team.points}</Text>
+        {team.winning > 0 && (
+          <Text style={tc.winning}>₹{team.winning}</Text>
+        )}
+      </View>
+    </View>
+
+    {/* CTA row */}
+    <View style={tc.ctaRow}>
+      <TouchableOpacity style={tc.ctaBtn} activeOpacity={0.7}>
+        <Text style={tc.ctaTxt}>🏆 VIEW CONTEST</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+);
+
 /* ------------------------------------------------------------------ *
  *  Main screen
  * ------------------------------------------------------------------ */
@@ -171,7 +242,20 @@ export const MyTeamsScreen: React.FC = () => {
       <ModernHeader />
       <SubTabBar active={activeSubTab} onChange={setActiveSubTab} />
       <StatsBar stats={MOCK_STATS} />
-      <MatchInfoCard match={MOCK_MATCH} />
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <MatchInfoCard match={MOCK_MATCH} />
+        <FlatList
+          data={MOCK_TEAMS}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <TeamCard team={item} />}
+          scrollEnabled={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -340,6 +424,132 @@ const mic = StyleSheet.create({
     color: '#ECBD15',
     fontSize: 14,
     fontWeight: '800',
+  },
+});
+
+const tc = StyleSheet.create({
+  root: {
+    backgroundColor: '#14141f',
+    marginHorizontal: 12,
+    borderRadius: 12,
+    paddingVertical: 12,
+    marginBottom: 8,
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  pill: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  pillTxt: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  actionBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionIcon: {
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  nameRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  teamName: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  rank: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  avatarsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  avatarStrip: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  avatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarTxt: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  overflowChip: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  overflowTxt: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  metricsCol: {
+    marginLeft: 12,
+    alignItems: 'flex-end',
+  },
+  points: {
+    color: '#ECBD15',
+    fontSize: 18,
+    fontWeight: '900',
+  },
+  winning: {
+    color: '#0FCC74',
+    fontSize: 16,
+    fontWeight: '800',
+    marginTop: 4,
+  },
+  ctaRow: {
+    alignItems: 'flex-end',
+  },
+  ctaBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  ctaTxt: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
 });
 
