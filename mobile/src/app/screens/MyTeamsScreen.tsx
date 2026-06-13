@@ -25,10 +25,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
-  Dimensions,
-  Animated,
 } from 'react-native';
-import { Svg, Path, Circle, Rect, G } from 'react-native-svg';
 import { MOCK_TEAMS, MOCK_STATS, MOCK_MATCH } from '../data/mockTeams';
 import { useDrawer } from '../../..';
 
@@ -109,22 +106,22 @@ const SubTabBar: React.FC<{
 // competing with the countdowns further down.
 const StatsBar: React.FC<{ stats: typeof MOCK_STATS }> = ({ stats }) => (
   <View style={sb.root}>
-    <View style={sb.item}>
+    <View style={sb.item} accessible accessibilityRole="text" accessibilityLabel={`${stats.teams} teams`}>
       <Text style={sb.value}>{stats.teams}</Text>
       <Text style={sb.label}>TEAMS</Text>
     </View>
     <View style={sb.divider} />
-    <View style={sb.item}>
+    <View style={sb.item} accessible accessibilityRole="text" accessibilityLabel={`Total winning ${stats.totalWinning} rupees`}>
       <Text style={sb.value}>₹{stats.totalWinning}</Text>
       <Text style={sb.label}>TOTAL WINNING</Text>
     </View>
     <View style={sb.divider} />
-    <View style={sb.item}>
+    <View style={sb.item} accessible accessibilityRole="text" accessibilityLabel={`${stats.contestsJoined} contests joined`}>
       <Text style={sb.value}>{stats.contestsJoined}</Text>
       <Text style={sb.label}>CONTESTS JOINED</Text>
     </View>
     <View style={sb.divider} />
-    <View style={sb.item}>
+    <View style={sb.item} accessible accessibilityRole="text" accessibilityLabel={`${stats.winningTeams} winning teams`}>
       <Text style={sb.value}>{stats.winningTeams}</Text>
       <Text style={sb.label}>WINNING TEAMS</Text>
     </View>
@@ -143,6 +140,7 @@ const MatchInfoCard: React.FC<{ match: typeof MOCK_MATCH }> = ({ match }) => {
       const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
       const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
       setTimeLeft({ h, m, s });
+      if (diff === 0) clearInterval(i);
     };
     tick();
     const i = setInterval(tick, 1000);
