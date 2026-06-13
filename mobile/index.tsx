@@ -17,6 +17,7 @@ import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { HomeScreen } from './src/app/screens/HomeScreen';
 import { LandingScreen } from './src/app/screens/LandingScreen';
@@ -78,28 +79,34 @@ function App() {
   }, [initialRoute]);
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle="light-content" backgroundColor="#080810" />
-      <DrawerContext.Provider value={{ openDrawer, navigate }}>
-        <View style={styles.root}>
-          <NavigationContainer ref={navRef as any}>
-            <Stack.Navigator
-              initialRouteName={initialRoute}
-              screenOptions={{ headerShown: false }}
-            >
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen name="Landing" component={LandingScreen} />
-              <Stack.Screen name="Otp" component={OtpScreen} />
-              <Stack.Screen name="Account" component={AccountScreen} />
-              <Stack.Screen name="MyContests" component={MyContestsScreen} />
-              <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
-              <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
-            </Stack.Navigator>
-          </NavigationContainer>
-          <SidebarDrawer visible={drawerVisible} onClose={closeDrawer} />
-        </View>
-      </DrawerContext.Provider>
-    </SafeAreaProvider>
+    // GestureHandlerRootView must wrap the entire app (above the
+    // NavigationContainer) so React Navigation 7's native-driven
+    // swipe-back gesture can intercept touches. On web it has no
+    // effect, so this is harmless there.
+    <GestureHandlerRootView style={styles.root}>
+      <SafeAreaProvider>
+        <StatusBar barStyle="light-content" backgroundColor="#080810" />
+        <DrawerContext.Provider value={{ openDrawer, navigate }}>
+          <View style={styles.root}>
+            <NavigationContainer ref={navRef as any}>
+              <Stack.Navigator
+                initialRouteName={initialRoute}
+                screenOptions={{ headerShown: false }}
+              >
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Landing" component={LandingScreen} />
+                <Stack.Screen name="Otp" component={OtpScreen} />
+                <Stack.Screen name="Account" component={AccountScreen} />
+                <Stack.Screen name="MyContests" component={MyContestsScreen} />
+                <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
+                <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
+              </Stack.Navigator>
+            </NavigationContainer>
+            <SidebarDrawer visible={drawerVisible} onClose={closeDrawer} />
+          </View>
+        </DrawerContext.Provider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
