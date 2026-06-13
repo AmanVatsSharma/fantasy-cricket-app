@@ -3,9 +3,18 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet, Animated, Dimensions, 
 import { apiClient } from '../api/apiClient';
 import { useAuthStore } from '../store/useAuthStore';
 import { useUserStore } from '../store/useUserStore';
+import { useDrawer } from '../../..';
+import { useToast } from './Toast';
 
 const { width, height } = Dimensions.get('window');
 const DRAWER_W = Math.min(320, width * 0.82);
+
+// Routes we have wired up in the dev server's Stack.Navigator. The drawer
+// is rendered above <NavigationContainer> and so uses DrawerContext.navigate
+// to dispatch pushes. Routes outside this set fall through to a "coming
+// soon" toast so the drawer stays navigable during the design preview
+// phase without crashing the app.
+const KNOWN_ROUTES = new Set(['Home', 'Landing', 'Otp', 'Account', 'MyContests', 'ContestLobby', 'ContestJoin']);
 
 const MENU_ITEMS = [
   { label: 'My Balance', icon: '💰', route: 'Wallet' },
@@ -19,13 +28,14 @@ const SUPPORT_ITEM = { label: '24x7 Help & Support', icon: '🎧', route: 'HelpS
 interface SidebarDrawerProps {
   visible: boolean;
   onClose: () => void;
-  navigation: any;
 }
 
-export const SidebarDrawer = ({ visible, onClose, navigation }: SidebarDrawerProps) => {
+export const SidebarDrawer = ({ visible, onClose }: SidebarDrawerProps) => {
   const slideAnim = useRef(new Animated.Value(-DRAWER_W)).current;
   const [sidebarBanner, setSidebarBanner] = useState<any>(null);
   const userName = useUserStore(s => s.name) || useAuthStore(s => s.email?.split('@')[0]) || 'DREAMER';
+  const { navigate } = useDrawer();
+  const { show } = useToast();
 
   useEffect(() => {
     if (visible) {
@@ -55,11 +65,18 @@ export const SidebarDrawer = ({ visible, onClose, navigation }: SidebarDrawerPro
   const navigateTo = (route: string) => {
     onClose();
     setTimeout(() => {
-      if (route === 'Settings') navigation.navigate('Settings');
-      else if (route === 'Wallet') navigation.navigate('Wallet');
-      else if (route === 'Info') navigation.navigate('Info', { title: 'How to Play', content: 'Fantasy cricket lets you build a virtual team of real players. Earn points based on their real-match performance. Create your team, join contests, and win cash prizes!' });
-      else if (route === 'HelpSupport') navigation.navigate('HelpSupport');
-      else navigation.navigate(route);
+      // Only push known routes. Unknown destinations (Settings, Wallet,
+      // Info, HelpSupport) surface as a dev-friendly toast so the drawer
+      // never crashes the preview build.
+      if (KNOWN_ROUTES.has(route)) {
+        navigate(route);
+        return;
+      }
+      if (route === 'Info') {
+        show('How to Play: Fantasy cricket lets you build a team of real players and earn points from their real-match performance.');
+        return;
+      }
+      show(`${route} — coming soon`);
     }, 220);
   };
 

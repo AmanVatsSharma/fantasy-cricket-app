@@ -11,7 +11,7 @@
  * On native (iOS/Android), the URL query string is ignored and Home is
  * always the first screen.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState, createContext, useContext } from 'react';
 import { registerRootComponent } from 'expo';
 import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -25,10 +25,20 @@ import { AccountScreen } from './src/app/screens/AccountScreen';
 import { MyContestsScreen } from './src/app/screens/MyContestsScreen';
 import { ContestLobbyScreen } from './src/app/screens/ContestLobbyScreen';
 import { ContestJoinScreen } from './src/app/screens/ContestJoinScreen';
+import { SidebarDrawer } from './src/app/components/SidebarDrawer';
 
 const Stack = createStackNavigator();
 
 const ALLOWED_SCREENS = new Set(['Home', 'Landing', 'Otp', 'Account', 'MyContests', 'ContestLobby', 'ContestJoin']);
+
+// Drawer context: lets HomeScreen open the global SidebarDrawer and route
+// menu taps into the active navigation stack (the drawer itself sits
+// *outside* <NavigationContainer>, so it can't call useNavigation()).
+const DrawerContext = createContext<{
+  openDrawer: () => void;
+  navigate: (route: string, params?: object) => void;
+}>({ openDrawer: () => {}, navigate: () => {} });
+export const useDrawer = () => useContext(DrawerContext);
 
 function getInitialRouteName(): string {
   if (Platform.OS !== 'web') return 'Home';
@@ -47,6 +57,17 @@ function App() {
   // Compute once on mount. The user can refresh the page with a new
   // ?screen=... value to jump between screens without nav edits.
   const [initialRoute] = useState<string>(getInitialRouteName);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const openDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
+
+  // Keep a ref to the navigation object so the SidebarDrawer (which is
+  // rendered above <NavigationContainer> and so cannot use
+  // useNavigation()) can still dispatch route pushes via the context.
+  const navRef = useRef<any>(null);
+  const navigate = (route: string, params?: object) => {
+    if (navRef.current) navRef.current.navigate(route, params);
+  };
 
   // Track route changes for debugging in the console
   useEffect(() => {
@@ -59,22 +80,25 @@ function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor="#080810" />
-      <View style={styles.root}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={initialRoute}
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Landing" component={LandingScreen} />
-            <Stack.Screen name="Otp" component={OtpScreen} />
-            <Stack.Screen name="Account" component={AccountScreen} />
-            <Stack.Screen name="MyContests" component={MyContestsScreen} />
-            <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
-            <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <DrawerContext.Provider value={{ openDrawer, navigate }}>
+        <View style={styles.root}>
+          <NavigationContainer ref={navRef as any}>
+            <Stack.Navigator
+              initialRouteName={initialRoute}
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Landing" component={LandingScreen} />
+              <Stack.Screen name="Otp" component={OtpScreen} />
+              <Stack.Screen name="Account" component={AccountScreen} />
+              <Stack.Screen name="MyContests" component={MyContestsScreen} />
+              <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
+              <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+          <SidebarDrawer visible={drawerVisible} onClose={closeDrawer} />
+        </View>
+      </DrawerContext.Provider>
     </SafeAreaProvider>
   );
 }

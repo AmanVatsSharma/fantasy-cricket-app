@@ -36,6 +36,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { useToast } from '../components/Toast';
 import { HomeTabBar, HomeTabName } from '../components/HomeTabBar';
+import { useDrawer } from '../../..';
 import { colors } from '../theme/colors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -328,6 +329,14 @@ const BellIcon: React.FC<{ color?: string }> = ({ color = colors.text.primary })
   </Svg>
 );
 
+const MenuIcon: React.FC<{ color?: string }> = ({ color = colors.text.primary }) => (
+  <Svg width={20} height={20} viewBox="0 0 24 24">
+    <Path d="M4 7 H20" stroke={color} strokeWidth={2} strokeLinecap="round" />
+    <Path d="M4 12 H20" stroke={color} strokeWidth={2} strokeLinecap="round" />
+    <Path d="M4 17 H20" stroke={color} strokeWidth={2} strokeLinecap="round" />
+  </Svg>
+);
+
 const ProfileIcon: React.FC<{ color?: string }> = ({ color = colors.text.primary }) => (
   <Svg width={20} height={20} viewBox="0 0 24 24">
     <Circle cx={12} cy={8} r={4} fill="none" stroke={color} strokeWidth={1.8} />
@@ -429,12 +438,17 @@ const SvgLetter: React.FC<{ text: string; color: string; x: number; y: number; s
   y,
   size,
 }) => (
-  <Svg
-    width={0}
-    height={0}
-    style={{ position: 'absolute' }}
-    pointerEvents="none"
-  />
+  <SvgText
+    x={x}
+    y={y}
+    textAnchor="middle"
+    fontSize={size}
+    fontWeight="900"
+    fill={color}
+    fontFamily="System"
+  >
+    {text}
+  </SvgText>
 );
 
 const WhyIcon: React.FC<{ kind: string; color: string; size?: number }> = ({ kind, color, size = 28 }) => {
@@ -614,6 +628,7 @@ export const HomeScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const { toast, show } = useToast();
   const nav = useNavigation();
+  const { openDrawer } = useDrawer();
   const [activeTab, setActiveTab] = useState<HomeTabName>('home');
 
   const [sport, setSport] = useState<'cricket' | 'football' | 'basketball'>('cricket');
@@ -699,6 +714,9 @@ export const HomeScreen: React.FC = () => {
       >
         {/* Header */}
         <View style={styles.header}>
+          <TouchableOpacity style={styles.menuBtn} onPress={openDrawer} activeOpacity={0.7}>
+            <MenuIcon />
+          </TouchableOpacity>
           <View style={styles.headerLeft}>
             <Wordmark size="md" />
             <View style={styles.walletPill}>
@@ -818,26 +836,28 @@ export const HomeScreen: React.FC = () => {
               activeOpacity={0.85}
               onPress={() => handleMatchJoin(`${m.teamA.abbr} vs ${m.teamB.abbr}`)}
             >
-              {/* Team A */}
-              <View style={styles.matchTeam}>
-                <View style={[styles.teamBadge, { backgroundColor: m.teamA.color }]}>
-                  <Text style={[styles.teamBadgeText, { color: m.teamA.textColor }]}>{m.teamA.abbr}</Text>
+<View style={styles.matchCardTop}>
+                {/* Team A */}
+                <View style={styles.matchTeam}>
+                  <View style={[styles.teamBadge, { backgroundColor: m.teamA.color }]}> 
+                    <Text style={[styles.teamBadgeText, { color: m.teamA.textColor }]}>{m.teamA.abbr}</Text>
+                  </View>
+                  <Text style={styles.teamName}>{m.teamA.name}</Text>
                 </View>
-                <Text style={styles.teamName}>{m.teamA.name}</Text>
-              </View>
 
-              {/* Center: time + vs */}
-              <View style={styles.matchCenter}>
-                <Text style={styles.matchStarts}>{m.startsIn}</Text>
-                <Text style={styles.matchTime}>{m.time}</Text>
-                <Text style={styles.matchVs}>VS</Text>
-              </View>
+                {/* Center: time + vs */}
+                <View style={styles.matchCenter}>
+                  <Text style={styles.matchStarts}>{m.startsIn}</Text>
+                  <Text style={styles.matchTime}>{m.time}</Text>
+                  <Text style={styles.matchVs}>VS</Text>
+                </View>
 
-              {/* Team B */}
-              <View style={styles.matchTeam}>
-                <Text style={styles.teamName}>{m.teamB.name}</Text>
-                <View style={[styles.teamBadge, { backgroundColor: m.teamB.color }]}>
-                  <Text style={[styles.teamBadgeText, { color: m.teamB.textColor }]}>{m.teamB.abbr}</Text>
+                {/* Team B */}
+                <View style={styles.matchTeam}>
+                  <Text style={styles.teamName}>{m.teamB.name}</Text>
+                  <View style={[styles.teamBadge, { backgroundColor: m.teamB.color }]}> 
+                    <Text style={[styles.teamBadgeText, { color: m.teamB.textColor }]}>{m.teamB.abbr}</Text>
+                  </View>
                 </View>
               </View>
 
@@ -1093,7 +1113,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 8,
   },
+  menuBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.border.subtle,
+    marginRight: 4,
+  },
   headerLeft: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
@@ -1308,38 +1340,50 @@ const styles = StyleSheet.create({
   /* Match card */
   matchCard: {
     backgroundColor: colors.surface.panel,
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 10,
+    borderRadius: 18,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: colors.border.subtle,
+    gap: 14,
+  },
+  matchCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'nowrap',
+    gap: 16,
   },
   matchTeam: {
+    minWidth: 90,
     alignItems: 'center',
-    flex: 1,
-    gap: 4,
+    justifyContent: 'center',
+    gap: 6,
+    flexShrink: 0,
   },
   teamBadge: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     alignItems: 'center',
     justifyContent: 'center',
   },
   teamBadgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '900',
-    letterSpacing: 0.4,
+    letterSpacing: 0.6,
   },
   teamName: {
     color: colors.text.muted,
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '700',
+    textAlign: 'center',
   },
   matchCenter: {
     alignItems: 'center',
-    paddingHorizontal: 6,
-    minWidth: 90,
+    paddingHorizontal: 10,
+    minWidth: 100,
   },
   matchStarts: {
     color: colors.brand.gold,
@@ -1360,13 +1404,15 @@ const styles = StyleSheet.create({
   },
   matchDivider: {
     height: 1,
+    width: '100%',
     backgroundColor: colors.border.subtle,
-    marginVertical: 12,
+    marginVertical: 14,
   },
   matchFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 8,
   },
   contestName: {
     color: colors.text.primary,
@@ -1495,19 +1541,6 @@ const styles = StyleSheet.create({
     marginTop: 1,
     textAlign: 'center',
     width: '92%',
-  },
-
-  /* Section header (Title + View All) */
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  viewAll: {
-    color: colors.brand.red,
-    fontSize: 11,
-    fontWeight: '800',
   },
 
   /* Popular Tournaments */
