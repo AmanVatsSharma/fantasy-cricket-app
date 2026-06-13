@@ -644,6 +644,7 @@ import { HomeScreen } from './screens/HomeScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { AccountScreen } from './screens/AccountScreen';
 import { MyContestsScreen } from './screens/MyContestsScreen';
+import { MyTeamsScreen } from './screens/MyTeamsScreen';
 import { ContestLobbyScreen } from './screens/ContestLobbyScreen';
 import { ContestJoinScreen } from './screens/ContestJoinScreen';
 
@@ -664,6 +665,7 @@ export const App = () => {
           </Stack.Screen>
           <Stack.Screen name="Account" component={AccountScreen} />
           <Stack.Screen name="MyContests" component={MyContestsScreen} />
+          <Stack.Screen name="MyTeams" component={MyTeamsScreen} />
           <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
           <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
         </Stack.Navigator>
@@ -680,7 +682,17 @@ export const App = () => {
 const MainTabs = () => (
   <Tab.Navigator tabBar={Dream11TabBar} screenOptions={{ headerShown: false }}>
     <Tab.Screen name="HOME" component={HomeContent} />
-    <Tab.Screen name="ACCOUNT" component={AccountScreen} />
+    <Tab.Screen name="MYCONTESTS" component={MyContestsScreen} />
+    <Tab.Screen name="MYTEAMS" component={MyTeamsScreen} />
+    <Tab.Screen name="WALLET" component={AccountScreen} />
+    <Tab.Screen
+      name="MORE"
+      component={() => (
+        <View style={{ flex: 1, backgroundColor: '#080810', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#fff', fontSize: 16 }}>More coming soon</Text>
+        </View>
+      )}
+    />
   </Tab.Navigator>
 );
 
