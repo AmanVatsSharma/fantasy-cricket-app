@@ -148,7 +148,7 @@ const MatchInfoCard: React.FC<{ match: typeof MOCK_MATCH }> = ({ match }) => {
       const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
       const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
       setTimeLeft({ h, m, s });
-      if (diff === 0) clearInterval(i);
+      return diff;
     };
     tick();
     const i = setInterval(tick, 1000);
