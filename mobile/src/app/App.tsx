@@ -639,34 +639,9 @@ const mc = StyleSheet.create({
 });
 
 // Screen imports
-import { SplashScreen } from './screens/SplashScreen';
 import { LandingScreen } from './screens/LandingScreen';
-import { LoginScreen } from './screens/LoginScreen';
-import { RegisterScreen } from './screens/RegisterScreen';
-import { VerifyOTPScreen } from './screens/VerifyOTPScreen';
 import { HomeScreen } from './screens/HomeScreen';
-import { MyMatchesScreen } from './screens/MyMatchesScreen';
-import { WalletScreen } from './screens/WalletScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
-import { MatchDetailScreen } from './screens/MatchDetailScreen';
-import { CreateTeamScreen } from './screens/CreateTeamScreen';
-import { SelectCaptainsScreen } from './screens/SelectCaptainsScreen';
-import { TeamPreviewScreen } from './screens/TeamPreviewScreen';
-import { LiveScoreboardScreen } from './screens/LiveScoreboardScreen';
-import { LeaderboardScreen } from './screens/LeaderboardScreen';
-import { KYCVerificationScreen } from './screens/KYCVerificationScreen';
-import { WithdrawalRequestScreen } from './screens/WithdrawalRequestScreen';
-import { NotificationScreen } from './screens/NotificationScreen';
-import { PointsSystemScreen } from './screens/PointsSystemScreen';
-import { ReferralScreen } from './screens/ReferralScreen';
-import { HelpSupportScreen } from './screens/HelpSupportScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
-import { TransactionDetailsScreen } from './screens/TransactionDetailsScreen';
-import { MyTeamsListScreen } from './screens/MyTeamsListScreen';
-import { InfoScreen } from './screens/InfoScreen';
-import { WinnerBreakupScreen } from './screens/WinnerBreakupScreen';
-import { WatchLiveScreen } from './screens/WatchLiveScreen';
-import { ClubsScreen } from './screens/ClubsScreen';
 import { AccountScreen } from './screens/AccountScreen';
 import { MyContestsScreen } from './screens/MyContestsScreen';
 import { ContestLobbyScreen } from './screens/ContestLobbyScreen';
@@ -682,32 +657,11 @@ export const App = () => {
   return (
     <DrawerContext.Provider value={{ openDrawer }}>
       <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Navigator initialRouteName="Landing" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Landing" component={LandingScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="VerifyOTP" component={VerifyOTPScreen} />
           <Stack.Screen name="Main">
             {() => <MainTabs />}
           </Stack.Screen>
-          <Stack.Screen name="MatchDetail" component={MatchDetailScreen} />
-          <Stack.Screen name="CreateTeam" component={CreateTeamScreen} />
-          <Stack.Screen name="SelectCaptains" component={SelectCaptainsScreen} />
-          <Stack.Screen name="TeamPreview" component={TeamPreviewScreen} />
-          <Stack.Screen name="LiveScoreboard" component={LiveScoreboardScreen} />
-          <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
-          <Stack.Screen name="KYCVerification" component={KYCVerificationScreen} />
-          <Stack.Screen name="WithdrawalRequest" component={WithdrawalRequestScreen} />
-          <Stack.Screen name="Notifications" component={NotificationScreen} />
-          <Stack.Screen name="PointsSystem" component={PointsSystemScreen} />
-          <Stack.Screen name="Referrals" component={ReferralScreen} />
-          <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen name="TransactionDetails" component={TransactionDetailsScreen} />
-          <Stack.Screen name="MyTeamsList" component={MyTeamsListScreen} />
-          <Stack.Screen name="Info" component={InfoScreen} />
-          <Stack.Screen name="WinnerBreakup" component={WinnerBreakupScreen} />
           <Stack.Screen name="Account" component={AccountScreen} />
           <Stack.Screen name="MyContests" component={MyContestsScreen} />
           <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
@@ -726,8 +680,6 @@ export const App = () => {
 const MainTabs = () => (
   <Tab.Navigator tabBar={Dream11TabBar} screenOptions={{ headerShown: false }}>
     <Tab.Screen name="HOME" component={HomeContent} />
-    <Tab.Screen name="WATCHLIVE" component={WatchLiveScreen} />
-    <Tab.Screen name="CLUBS" component={ClubsScreen} />
     <Tab.Screen name="ACCOUNT" component={AccountScreen} />
   </Tab.Navigator>
 );

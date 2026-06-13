@@ -22,10 +22,13 @@ import { HomeScreen } from './src/app/screens/HomeScreen';
 import { LandingScreen } from './src/app/screens/LandingScreen';
 import { OtpScreen } from './src/app/screens/OtpScreen';
 import { AccountScreen } from './src/app/screens/AccountScreen';
+import { MyContestsScreen } from './src/app/screens/MyContestsScreen';
+import { ContestLobbyScreen } from './src/app/screens/ContestLobbyScreen';
+import { ContestJoinScreen } from './src/app/screens/ContestJoinScreen';
 
 const Stack = createStackNavigator();
 
-const ALLOWED_SCREENS = new Set(['Home', 'Landing', 'Otp', 'Account']);
+const ALLOWED_SCREENS = new Set(['Home', 'Landing', 'Otp', 'Account', 'MyContests', 'ContestLobby', 'ContestJoin']);
 
 function getInitialRouteName(): string {
   if (Platform.OS !== 'web') return 'Home';
@@ -66,6 +69,9 @@ function App() {
             <Stack.Screen name="Landing" component={LandingScreen} />
             <Stack.Screen name="Otp" component={OtpScreen} />
             <Stack.Screen name="Account" component={AccountScreen} />
+            <Stack.Screen name="MyContests" component={MyContestsScreen} />
+            <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
+            <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>

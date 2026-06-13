@@ -613,6 +613,7 @@ const BatterSilhouette: React.FC<{ height?: number }> = ({ height = 220 }) => {
 export const HomeScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const { toast, show } = useToast();
+  const nav = useNavigation();
   const [activeTab, setActiveTab] = useState<HomeTabName>('home');
 
   const [sport, setSport] = useState<'cricket' | 'football' | 'basketball'>('cricket');
@@ -655,6 +656,10 @@ export const HomeScreen: React.FC = () => {
 
   const handleTabChange = (tab: HomeTabName) => {
     setActiveTab(tab);
+    if (tab === 'contests') {
+      (nav as any).navigate('MyContests');
+      return;
+    }
     if (tab !== 'home') {
       const labels: Record<HomeTabName, string> = {
         home: '',
