@@ -1,12 +1,14 @@
 /**
  * File:        mobile/src/app/components/Dream11TabBar.tsx
  * Module:      Mobile · Navigation
- * Purpose:     Dream11-style bottom tab bar with floating raised Account button
+ * Purpose:     Bottom tab bar with 5 tabs (Home / My Contests / My Teams /
+ *              Wallet / More). Red glow above the active tab, no floating
+ *              button, no nav arrows.
  *
  * Exports:
- *   - TAB_ICONS — static array of 4 tab definitions
- *   - TabIcon(props) — renders HOME/WATCHLIVE/CLUBS/ACCOUNT SVG icons
- *   - Dream11TabBar(props) — bottom tab bar component with red glow and floating button
+ *   - TAB_ICONS — static array of 5 tab definitions
+ *   - TabIcon(props) — renders HOME/MYCONTESTS/MYTEAMS/WALLET/MORE SVG icons
+ *   - Dream11TabBar(props) — bottom tab bar component with red glow
  *
  * Depends on:
  *   - react-native — View, TouchableOpacity, Text, StyleSheet
@@ -15,16 +17,11 @@
  * Side-effects:  none
  *
  * Key invariants:
- *   - All 4 tabs are rendered in the map so redGlow positioning via (focusedIndex + 0.5) * 25% stays accurate
- *   - Floating button overlays ACCOUNT visual representation but ACCOUNT tab row remains in layout
- *
- * Read order:
- *   1. TAB_ICONS — tab label definitions
- *   2. TabIcon — SVG icon renderer
- *   3. Dream11TabBar — main component with floating Account button
+ *   - All 5 tabs are rendered in the map so redGlow positioning via
+ *     (focusedIndex + 0.5) * 20% stays accurate
  *
  * Author:      AmanVatsSharma
- * Last-updated: 2026-05-24
+ * Last-updated: 2026-06-13
  */
 
 import React from 'react';
