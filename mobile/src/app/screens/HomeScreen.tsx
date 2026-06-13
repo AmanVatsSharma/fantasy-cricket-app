@@ -671,20 +671,34 @@ export const HomeScreen: React.FC = () => {
 
   const handleTabChange = (tab: HomeTabName) => {
     setActiveTab(tab);
+
+    if (tab === 'home') {
+      // Tapping the Home tab from anywhere in the stack (MyContests,
+      // ContestLobby, ContestJoin, etc.) collapses the navigator back
+      // to the root so the user always lands on Home. If we're
+      // already on Home this is a no-op, which is the standard
+      // behavior of bottom-tab "home" affordances.
+      if ((nav as any).canGoBack?.() || (nav as any).getCurrentRoute?.()?.name !== 'Home') {
+        (nav as any).popToTop?.();
+      }
+      return;
+    }
+
     if (tab === 'contests') {
       (nav as any).navigate('MyContests');
       return;
     }
-    if (tab !== 'home') {
-      const labels: Record<HomeTabName, string> = {
-        home: '',
-        contests: 'My Contests',
-        teams: 'My Teams',
-        wallet: 'Wallet',
-        more: 'More',
-      };
-      show(`${labels[tab]} coming soon`);
-    }
+
+    // Teams / Wallet / More aren't wired up yet — surface a toast so
+    // the user knows the tap registered.
+    const labels: Record<HomeTabName, string> = {
+      home: 'Home',
+      contests: 'My Contests',
+      teams: 'My Teams',
+      wallet: 'Wallet',
+      more: 'More',
+    };
+    show(`${labels[tab]} coming soon`);
   };
 
   const handleSportChange = (s: 'cricket' | 'football' | 'basketball') => {
