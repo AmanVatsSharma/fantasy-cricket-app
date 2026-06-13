@@ -19,8 +19,7 @@
       }
     },
     "web": {
-      "bundler": "metro",
-      "favicon": "./assets/favicon.png"
+      "bundler": "metro"
     },
     "main": "index.tsx",
     "platforms": ["web", "ios", "android"]

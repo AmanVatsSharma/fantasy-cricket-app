@@ -1,34 +1,37 @@
 // Learn more https://docs.expo.dev/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
+const path = require('path');
 
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 
-// Stub missing files referenced by App.tsx. When LoginScreen.tsx (or any
-// screen) imports the apiClient, Metro will resolve it to our stub so the
-// screen can render without a real backend.
-config.resolver.extraNodeModules = {
-  ...(config.resolver.extraNodeModules || {}),
-};
+// Alias the apiClient import to our stub. We do this with a resolver hook
+// (instead of a file-system symlink) so the stub lives inside the source
+// tree and Metro can serve it through its normal module pipeline.
+//
+// IMPORTANT: Expo's `withMetroResolvers` wraps the resolver chain and the
+// `context` object it passes does NOT include `projectRoot`. We must use
+// the cwd of the metro process (i.e. the directory metro.config.js lives in)
+// as the project root.
+const projectRoot = __dirname;
 
-// Re-alias the bare "apiClient" path used by LoginScreen.tsx
-// (../api/apiClient resolves to src/app/api/apiClient).
-// We do this with a resolver hook rather than a file-system symlink so the
-// stub stays inside the source tree.
-const path = require('path');
-const fs = require('fs');
+// Keep a reference to Expo's default resolver so we delegate when the
+// import isn't ours.
+const expoResolver = config.resolver.resolveRequest;
 
-const originalResolve = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-  // Map any "*/api/apiClient" import to the stub file
-  if (moduleName.endsWith('/api/apiClient') || moduleName === 'apiClient') {
-    const stub = path.join(context.projectRoot, 'src/app/api/apiClient.stub.ts');
-    if (fs.existsSync(stub)) {
-      return { type: 'sourceFile', filePath: stub };
-    }
+  // Match both `.../api/apiClient` (from store files: `../api/apiClient`)
+  // and the bare `apiClient` (in case anyone imports it that way).
+  if (
+    typeof moduleName === 'string' &&
+    (moduleName === 'apiClient' || /\/api\/apiClient$/.test(moduleName))
+  ) {
+    const stub = path.join(projectRoot, 'src', 'app', 'api', 'apiClient.stub.ts');
+    return { type: 'sourceFile', filePath: stub };
   }
-  if (originalResolve) {
-    return originalResolve(context, moduleName, platform);
+
+  if (expoResolver) {
+    return expoResolver(context, moduleName, platform);
   }
   return context.resolveRequest(context, moduleName, platform);
 };
