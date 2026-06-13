@@ -136,10 +136,10 @@ const SPORTS = [
 ];
 
 const WHY_DREAMER = [
-  { icon: 'shield', color: colors.brand.red, title: '100% Safe', sub: 'Bank-level security' },
-  { icon: 'trophy', color: colors.brand.red, title: 'Big Winnings', sub: 'Every day' },
-  { icon: 'users', color: colors.brand.red, title: '10 Crore+', sub: 'Active users' },
-  { icon: 'headset', color: colors.brand.red, title: '24×7', sub: 'Support' },
+  { icon: 'shield', color: colors.brand.red, title: '100% Safe & Secure', sub: 'Bank-level security' },
+  { icon: 'trophy', color: colors.brand.red, title: 'Big Winnings Every Day', sub: 'Daily cash prizes' },
+  { icon: 'users', color: colors.brand.red, title: '10 Crore+ Users', sub: 'A large fan base' },
+  { icon: 'headset', color: colors.brand.red, title: '24x7 Support', sub: 'We are always here' },
 ];
 
 const POPULAR_TOURNAMENTS = [
@@ -258,6 +258,60 @@ const MoneyIcon: React.FC<{ size?: number; color?: string }> = ({ size = 22, col
     <SvgText x="12" y="16" textAnchor="middle" fontSize="14" fontWeight="900" fill={color} fontFamily="System">₹</SvgText>
   </Svg>
 );
+
+const GiftIcon: React.FC<{ size?: number }> = ({ size = 56 }) => (
+  <Svg width={size} height={size} viewBox="0 0 56 56">
+    <Rect x={6} y={22} width={44} height={28} rx={2} fill={colors.brand.gold} />
+    <Rect x={6} y={18} width={44} height={6} fill="#B89015" />
+    <Rect x={25} y={18} width={6} height={32} fill={colors.brand.red} />
+    <Path d="M15 18 C11 18 9 14 11 11 C13 8 17 10 17 14 L17 18" fill={colors.brand.gold} stroke="#B89015" strokeWidth={1.4} />
+    <Path d="M41 18 C45 18 47 14 45 11 C43 8 39 10 39 14 L39 18" fill={colors.brand.gold} stroke="#B89015" strokeWidth={1.4} />
+    <Path d="M10 26 H46" stroke="#B89015" strokeWidth={1} opacity={0.5} />
+  </Svg>
+);
+
+const ShareIcon: React.FC<{ size?: number; color?: string }> = ({ size = 16, color = '#FFFFFF' }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Path d="M16 7 L21 12 L16 17" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+    <Path d="M3 12 H21" stroke={color} strokeWidth={2} strokeLinecap="round" />
+  </Svg>
+);
+
+const TournamentTrophy: React.FC<{ size?: number }> = ({ size = 40 }) => (
+  <Svg width={size} height={size} viewBox="0 0 48 48">
+    <Path d="M14 8 H34 V20 C34 27 28 30 24 30 C20 30 14 27 14 20 V8 Z" fill={colors.brand.gold} stroke="#B89015" strokeWidth={1.5} strokeLinejoin="round" />
+    <Path d="M14 12 H8 C8 17 11 20 14 20" fill="none" stroke={colors.brand.gold} strokeWidth={1.5} strokeLinecap="round" />
+    <Path d="M34 12 H40 C40 17 37 20 34 20" fill="none" stroke={colors.brand.gold} strokeWidth={1.5} strokeLinecap="round" />
+    <Rect x={18} y={30} width={12} height={5} fill={colors.brand.gold} />
+    <Rect x={16} y={35} width={16} height={4} rx={1.5} fill={colors.brand.gold} />
+    <Rect x={14} y={39} width={20} height={3} rx={1.5} fill={colors.brand.gold} />
+  </Svg>
+);
+
+const LeaderIcon: React.FC<{ rank: number }> = ({ rank }) => {
+  if (rank === 1) {
+    return (
+      <Svg width={26} height={26} viewBox="0 0 24 24">
+        <Path d="M5 5 L12 3 L19 5 L19 12 C19 16 16 18 12 19 C8 18 5 16 5 12 Z" fill={colors.brand.gold} stroke="#B89015" strokeWidth={1.2} />
+        <SvgText x="12" y="14" textAnchor="middle" fontSize="10" fontWeight="900" fill="#FFFFFF" fontFamily="System">1</SvgText>
+      </Svg>
+    );
+  }
+  if (rank === 2) {
+    return (
+      <Svg width={26} height={26} viewBox="0 0 24 24">
+        <Path d="M5 5 L12 3 L19 5 L19 12 C19 16 16 18 12 19 C8 18 5 16 5 12 Z" fill="#C0C0C0" stroke="#888888" strokeWidth={1.2} />
+        <SvgText x="12" y="14" textAnchor="middle" fontSize="10" fontWeight="900" fill="#FFFFFF" fontFamily="System">2</SvgText>
+      </Svg>
+    );
+  }
+  return (
+    <Svg width={26} height={26} viewBox="0 0 24 24">
+      <Path d="M5 5 L12 3 L19 5 L19 12 C19 16 16 18 12 19 C8 18 5 16 5 12 Z" fill="#CD7F32" stroke="#8B5A2B" strokeWidth={1.2} />
+      <SvgText x="12" y="14" textAnchor="middle" fontSize="10" fontWeight="900" fill="#FFFFFF" fontFamily="System">3</SvgText>
+    </Svg>
+  );
+};
 
 const BellIcon: React.FC<{ color?: string }> = ({ color = colors.text.primary }) => (
   <Svg width={20} height={20} viewBox="0 0 24 24">
@@ -660,27 +714,32 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         {/* Sports nav */}
-        <View style={styles.sportsRow}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.sportsRow}
+          contentContainerStyle={styles.sportsRowContent}
+        >
           {SPORTS.map((s) => {
             const Icon =
-              s.name === 'Cricket' ? CricketBallIcon : s.name === 'Football' ? FootballIcon : BasketballIcon;
-            const active = sport === s.name.toLowerCase();
+              s.key === 'cricket' ? CricketBallIcon : s.key === 'football' ? FootballIcon : s.key === 'kabaddi' ? KabaddiIcon : BasketballIcon;
+            const active = sport === s.key;
             return (
               <TouchableOpacity
                 key={s.name}
                 style={[styles.sportPill, active && styles.sportPillActive]}
-                onPress={() => handleSportChange(s.name.toLowerCase() as any)}
+                onPress={() => handleSportChange(s.key as any)}
                 activeOpacity={0.7}
               >
                 <Icon size={14} color={active ? colors.brand.red : colors.text.muted} />
                 <Text style={[styles.sportLabel, active && styles.sportLabelActive]}>{s.name}</Text>
                 {s.comingSoon && (
-                  <View style={styles.comingSoonDot} />
+                  <Text style={styles.comingSoonText}>Coming Soon</Text>
                 )}
               </TouchableOpacity>
             );
           })}
-        </View>
+        </ScrollView>
 
         {/* Hero carousel */}
         <View style={styles.heroWrap}>
@@ -822,6 +881,16 @@ export const HomeScreen: React.FC = () => {
                 <Text style={styles.contestCardName}>{c.name}</Text>
                 <Text style={styles.contestCardPrize}>{c.prize}</Text>
                 <Text style={styles.contestCardPrizeLabel}>Winnings</Text>
+                {/* Fill progress bar */}
+                <View style={styles.contestProgressTrack}>
+                  <View
+                    style={[
+                      styles.contestProgressFill,
+                      { width: `${c.filledPct}%`, backgroundColor: c.filledPct >= 60 ? colors.brand.red : colors.brand.gold },
+                    ]}
+                  />
+                </View>
+                <Text style={styles.contestProgressLabel}>{c.filledPct}% Filled</Text>
                 <View style={styles.contestJoinBtn}>
                   <Text style={styles.contestJoinText}>JOIN ₹{c.entry.replace('₹', '')}</Text>
                 </View>
@@ -830,19 +899,130 @@ export const HomeScreen: React.FC = () => {
           </ScrollView>
         </View>
 
+        {/* Popular Tournaments */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Popular Tournaments</Text>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => show('Tournaments: coming soon')}>
+              <Text style={styles.viewAll}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.tournamentsRow}
+          >
+            {POPULAR_TOURNAMENTS.map((t) => (
+              <TouchableOpacity
+                key={t.id}
+                style={styles.tournamentCard}
+                activeOpacity={0.85}
+                onPress={() => show(`${t.name} — ${t.prize}`)}
+              >
+                <TournamentTrophy size={40} />
+                <Text style={styles.tournamentName}>{t.name}</Text>
+                <View style={styles.tournamentMetaRow}>
+                  <Text style={styles.tournamentPrize}>{t.prize}</Text>
+                  <Text style={styles.tournamentDot}>·</Text>
+                  <Text style={styles.tournamentMatches}>{t.matches} Matches</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* How to Play */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>How to Play 11Dreamer?</Text>
+          <View style={styles.howToPlayRow}>
+            {HOW_TO_PLAY.map((h, idx) => (
+              <View key={h.step} style={styles.howCell}>
+                <View style={styles.howIconWrap}>
+                  {h.icon === 'plus' && <PlusIcon size={28} />}
+                  {h.icon === 'users' && <WhyIcon kind="users" color={colors.brand.red} size={28} />}
+                  {h.icon === 'trophy' && <WhyIcon kind="trophy" color={colors.brand.red} size={28} />}
+                  {h.icon === 'money' && <MoneyIcon size={28} color={colors.brand.red} />}
+                </View>
+                <Text style={styles.howStep}>Step {h.step}</Text>
+                <Text style={styles.howTitle}>{h.title}</Text>
+                {idx < HOW_TO_PLAY.length - 1 && (
+                  <View style={styles.howArrow}>
+                    <Svg width={14} height={14} viewBox="0 0 24 24">
+                      <Path d="M9 6 L15 12 L9 18" fill="none" stroke={colors.brand.red} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    </Svg>
+                  </View>
+                )}
+              </View>
+            ))}
+          </View>
+        </View>
+
         {/* Why 11Dreamer */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>Why 11Dreamer</Text>
           <View style={styles.whyGrid}>
             {WHY_DREAMER.map((w) => (
               <View key={w.title} style={styles.whyCell}>
-                <WhyIcon kind={w.icon} color={w.color} size={28} />
+                <View style={styles.whyIconWrap}>
+                  <WhyIcon kind={w.icon} color={w.color} size={24} />
+                </View>
                 <Text style={styles.whyTitle}>{w.title}</Text>
                 <Text style={styles.whySub}>{w.sub}</Text>
               </View>
             ))}
           </View>
         </View>
+
+        {/* Live Leaderboard */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Live Leaderboard</Text>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => show('Leaderboard: full list coming soon')}>
+              <Text style={styles.viewAll}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          {LEADERBOARD.map((l) => (
+            <View key={l.rank} style={styles.leaderRow}>
+              <LeaderIcon rank={l.rank} />
+              <View style={styles.leaderAvatar}>
+                <Svg width={36} height={36} viewBox="0 0 36 36">
+                  <Circle cx={18} cy={14} r={6} fill={colors.brand.red} opacity={0.85} />
+                  <Path d="M5 33 C5 25 11 21 18 21 C25 21 31 25 31 33" fill={colors.brand.red} opacity={0.85} />
+                </Svg>
+              </View>
+              <View style={styles.leaderText}>
+                <Text style={styles.leaderName}>{l.name}</Text>
+                <Text style={styles.leaderPoints}>{l.points} Points</Text>
+              </View>
+              <Text style={styles.leaderEarnings}>{l.earnings}</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Referral Banner */}
+        <TouchableOpacity
+          style={styles.referralBanner}
+          activeOpacity={0.9}
+          onPress={() => show('Referral link copied!')}
+        >
+          <View style={styles.referralLeft}>
+            <GiftIcon size={56} />
+          </View>
+          <View style={styles.referralText}>
+            <Text style={styles.referralTitle}>Invite Your Friends & Earn</Text>
+            <Text style={styles.referralSub}>
+              Earn <Text style={styles.referralAmount}>₹100</Text> as your friend joins & plays!
+            </Text>
+          </View>
+          <View style={styles.referralActions}>
+            <View style={styles.referralInviteBtn}>
+              <Text style={styles.referralInviteText}>INVITE NOW</Text>
+            </View>
+            <View style={styles.referralShareIcon}>
+              <ShareIcon size={14} color={colors.text.primary} />
+            </View>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
 
       {/* Bottom tab bar */}
@@ -929,24 +1109,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(236, 189, 21, 0.12)',
+    backgroundColor: 'rgba(236, 189, 21, 0.18)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(236, 189, 21, 0.35)',
+    borderColor: 'rgba(236, 189, 21, 0.55)',
   },
   walletAmount: {
-    color: colors.brand.gold,
+    color: '#FFFFFF',
     fontSize: 11,
     fontWeight: '800',
   },
 
   /* Sports nav */
   sportsRow: {
-    flexDirection: 'row',
     marginTop: 14,
+  },
+  sportsRowContent: {
+    flexDirection: 'row',
     gap: 8,
+    paddingRight: 4,
   },
   sportPill: {
     flexDirection: 'row',
@@ -971,11 +1154,11 @@ const styles = StyleSheet.create({
   sportLabelActive: {
     color: colors.brand.red,
   },
-  comingSoonDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: colors.brand.gold,
+  comingSoonText: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 8.5,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
 
   /* Hero */
@@ -1065,12 +1248,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     marginTop: 14,
-    backgroundColor: 'rgba(255,255,255,0.18)',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 18,
+    backgroundColor: colors.brand.red,
+    paddingHorizontal: 16,
+    paddingVertical: 9,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: '#FF6B7A',
+    shadowColor: colors.brand.red,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+    elevation: 5,
   },
   heroPlayBtnText: {
     color: colors.text.onRed,
@@ -1235,6 +1423,24 @@ const styles = StyleSheet.create({
     marginTop: 1,
     marginBottom: 10,
   },
+  contestProgressTrack: {
+    width: '100%',
+    height: 4,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 2,
+    overflow: 'hidden',
+    marginBottom: 4,
+  },
+  contestProgressFill: {
+    height: '100%',
+    borderRadius: 2,
+  },
+  contestProgressLabel: {
+    color: colors.text.muted,
+    fontSize: 9,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
   contestJoinBtn: {
     backgroundColor: 'rgba(31, 168, 85, 0.15)',
     paddingHorizontal: 10,
@@ -1257,18 +1463,219 @@ const styles = StyleSheet.create({
   whyCell: {
     width: '50%',
     alignItems: 'center',
-    paddingVertical: 14,
+    paddingVertical: 16,
+  },
+  whyIconWrap: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(206, 64, 77, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(206, 64, 77, 0.4)',
   },
   whyTitle: {
     color: colors.text.primary,
     fontSize: 12,
     fontWeight: '800',
-    marginTop: 8,
+    marginTop: 10,
+    textAlign: 'center',
+    width: '92%',
   },
   whySub: {
     color: colors.text.muted,
     fontSize: 10,
     marginTop: 1,
+    textAlign: 'center',
+    width: '92%',
+  },
+
+  /* Section header (Title + View All) */
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  viewAll: {
+    color: colors.brand.red,
+    fontSize: 11,
+    fontWeight: '800',
+  },
+
+  /* Popular Tournaments */
+  tournamentsRow: {
+    gap: 10,
+    paddingRight: 16,
+  },
+  tournamentCard: {
+    width: 170,
+    backgroundColor: colors.surface.panel,
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: colors.border.subtle,
+    alignItems: 'center',
+  },
+  tournamentName: {
+    color: colors.text.primary,
+    fontSize: 12,
+    fontWeight: '800',
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  tournamentMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    gap: 4,
+  },
+  tournamentPrize: {
+    color: colors.brand.gold,
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  tournamentDot: {
+    color: colors.text.muted,
+    fontSize: 11,
+  },
+  tournamentMatches: {
+    color: colors.text.muted,
+    fontSize: 10,
+    fontWeight: '600',
+  },
+
+  /* How to Play */
+  howToPlayRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  howCell: {
+    alignItems: 'center',
+    flex: 1,
+    position: 'relative',
+  },
+  howIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(206, 64, 77, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(206, 64, 77, 0.4)',
+  },
+  howStep: {
+    color: colors.text.muted,
+    fontSize: 9,
+    fontWeight: '700',
+    marginTop: 6,
+    letterSpacing: 0.5,
+  },
+  howTitle: {
+    color: colors.text.primary,
+    fontSize: 10.5,
+    fontWeight: '800',
+    marginTop: 1,
+    textAlign: 'center',
+  },
+  howArrow: {
+    position: 'absolute',
+    right: -8,
+    top: 17,
+  },
+
+  /* Live Leaderboard */
+  leaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface.panel,
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: colors.border.subtle,
+  },
+  leaderAvatar: {
+    marginLeft: 8,
+    marginRight: 10,
+  },
+  leaderText: {
+    flex: 1,
+  },
+  leaderName: {
+    color: colors.text.primary,
+    fontSize: 12.5,
+    fontWeight: '800',
+  },
+  leaderPoints: {
+    color: colors.text.muted,
+    fontSize: 10,
+    fontWeight: '600',
+    marginTop: 1,
+  },
+  leaderEarnings: {
+    color: colors.brand.green,
+    fontSize: 12,
+    fontWeight: '900',
+  },
+
+  /* Referral Banner */
+  referralBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(206, 64, 77, 0.12)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(206, 64, 77, 0.4)',
+    padding: 14,
+    marginBottom: 24,
+  },
+  referralLeft: {
+    marginRight: 12,
+  },
+  referralText: {
+    flex: 1,
+  },
+  referralTitle: {
+    color: colors.text.primary,
+    fontSize: 13,
+    fontWeight: '900',
+  },
+  referralSub: {
+    color: colors.text.muted,
+    fontSize: 10.5,
+    marginTop: 2,
+  },
+  referralAmount: {
+    color: colors.brand.gold,
+    fontWeight: '900',
+  },
+  referralActions: {
+    alignItems: 'center',
+    gap: 6,
+  },
+  referralInviteBtn: {
+    backgroundColor: colors.brand.red,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  referralInviteText: {
+    color: colors.text.onRed,
+    fontSize: 9.5,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+  },
+  referralShareIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   /* Toast (custom rendering to keep on top of tabs) */
