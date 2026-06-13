@@ -32,6 +32,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Svg, Path, Circle, Rect, G, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
 
 import { useToast } from '../components/Toast';
 import { HomeTabBar, HomeTabName } from '../components/HomeTabBar';

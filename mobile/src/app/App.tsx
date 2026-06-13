@@ -668,6 +668,9 @@ import { WinnerBreakupScreen } from './screens/WinnerBreakupScreen';
 import { WatchLiveScreen } from './screens/WatchLiveScreen';
 import { ClubsScreen } from './screens/ClubsScreen';
 import { AccountScreen } from './screens/AccountScreen';
+import { MyContestsScreen } from './screens/MyContestsScreen';
+import { ContestLobbyScreen } from './screens/ContestLobbyScreen';
+import { ContestJoinScreen } from './screens/ContestJoinScreen';
 
 export const App = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -706,6 +709,9 @@ export const App = () => {
           <Stack.Screen name="Info" component={InfoScreen} />
           <Stack.Screen name="WinnerBreakup" component={WinnerBreakupScreen} />
           <Stack.Screen name="Account" component={AccountScreen} />
+          <Stack.Screen name="MyContests" component={MyContestsScreen} />
+          <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
+          <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
         </Stack.Navigator>
         <SidebarDrawer
           visible={drawerVisible}
