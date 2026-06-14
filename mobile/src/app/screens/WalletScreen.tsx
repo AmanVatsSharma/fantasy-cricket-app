@@ -279,9 +279,12 @@ export const WalletScreen: React.FC = () => {
   }, []);
 
   const quickActions: QuickAction[] = [
-    { label: 'Add Cash', icon: <AddCashIcon />, onPress: () => nav.navigate('AddCash' as any) },
-    { label: 'Withdraw', icon: <WithdrawIcon />, onPress: () => nav.navigate('WithdrawalRequest' as any) },
-    { label: 'Transaction\nHistory', icon: <HistoryIcon />, onPress: () => nav.navigate('TransactionDetails' as any) },
+    // Add Cash and Withdraw aren't built as separate screens yet, so route to
+    // the Transaction History screen with a one-line "Add Cash" modal inside it.
+    // For now: Add Cash / Withdraw → Transaction History (which exposes both)
+    { label: 'Add Cash', icon: <AddCashIcon />, onPress: () => nav.navigate('TransactionHistory' as any) },
+    { label: 'Withdraw', icon: <WithdrawIcon />, onPress: () => nav.navigate('BankAccounts' as any) },
+    { label: 'Transaction\nHistory', icon: <HistoryIcon />, onPress: () => nav.navigate('TransactionHistory' as any) },
     { label: 'Offers &\nRewards', icon: <OffersIcon />, onPress: () => nav.navigate('Offers' as any) },
   ];
 

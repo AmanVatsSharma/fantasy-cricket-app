@@ -38,6 +38,7 @@ interface WalletState {
   hydrate: (userId: number) => Promise<void>;
   setBalance: (balance: number) => void;
   addCashback: (amount: number) => void;
+  claimBonus: (amount: number) => void;
   logout: () => void;
   isEmpty: () => boolean;
 }
@@ -70,6 +71,18 @@ export const useWalletStore = create<WalletState>()(
 
       addCashback: (amount: number) =>
         set({ cashback: get().cashback + amount }),
+
+      claimBonus: (amount: number) => {
+        // Move the bonus from `cashback` to `balance` so it's
+        // available to use for contest entry.
+        const { cashback, balance } = get();
+        const claimable = Math.min(cashback, amount);
+        if (claimable <= 0) return;
+        set({
+          cashback: cashback - claimable,
+          balance: balance + claimable,
+        });
+      },
 
       logout: () =>
         set({ balance: 0, cashback: 0, winnings: 0, loading: false }),

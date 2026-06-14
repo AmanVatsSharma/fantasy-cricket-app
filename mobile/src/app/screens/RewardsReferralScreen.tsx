@@ -27,6 +27,7 @@ import {
 } from 'react-native';
 import { Svg, Path, Circle, Rect } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
+import { useWalletStore } from '../store/useWalletStore';
 import { colors } from '../theme/colors';
 
 // ─── Inline SVG Icons ───────────────────────────────────────────────────────
@@ -115,13 +116,24 @@ const REFERRAL_HISTORY = [
 
 export const RewardsReferralScreen: React.FC = () => {
   const navigation = useNavigation();
+  const claimBonus = useWalletStore((s) => s.claimBonus);
+  const cashback = useWalletStore((s) => s.cashback);
   const [copied, setCopied] = useState(false);
+  const [claimedAmount, setClaimedAmount] = useState<number | null>(null);
   const referralCode = 'AMAN50';
   const referralLink = `https://11dreamer.app/r/${referralCode}`;
 
   const handleCopy = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleClaim = () => {
+    if (cashback <= 0) return;
+    const amount = cashback;
+    claimBonus(amount);
+    setClaimedAmount(amount);
+    setTimeout(() => setClaimedAmount(null), 2200);
   };
 
   const handleShare = async (platform?: string) => {
@@ -172,6 +184,27 @@ export const RewardsReferralScreen: React.FC = () => {
               <Text style={styles.heroStatLabel}>Pending</Text>
             </View>
           </View>
+        </View>
+
+        {/* Claim pending bonus */}
+        <View style={styles.claimCard}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.claimTitle}>Pending Bonus</Text>
+            <Text style={styles.claimAmount}>₹{cashback}</Text>
+            <Text style={styles.claimSub}>Move your earned bonus into your wallet balance</Text>
+          </View>
+          <TouchableOpacity
+            style={[styles.claimBtn, cashback <= 0 && styles.claimBtnDisabled]}
+            onPress={handleClaim}
+            disabled={cashback <= 0}
+            activeOpacity={0.85}
+          >
+            {claimedAmount !== null ? (
+              <Text style={styles.claimBtnText}>+₹{claimedAmount} Added</Text>
+            ) : (
+              <Text style={styles.claimBtnText}>CLAIM</Text>
+            )}
+          </TouchableOpacity>
         </View>
 
         {/* Referral Code */}
@@ -329,6 +362,22 @@ const styles = StyleSheet.create({
   heroStatValue: { color: '#fff', fontSize: 18, fontWeight: '900' },
   heroStatLabel: { color: '#8a8a9a', fontSize: 10, marginTop: 4 },
   heroStatDivider: { width: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
+
+  claimCard: {
+    flexDirection: 'row', alignItems: 'center',
+    marginHorizontal: 16, marginBottom: 16, padding: 16, borderRadius: 14,
+    backgroundColor: 'rgba(236,189,21,0.08)',
+    borderWidth: 1, borderColor: 'rgba(236,189,21,0.25)',
+  },
+  claimTitle: { color: '#8a8a9a', fontSize: 11, fontWeight: '700', letterSpacing: 1 },
+  claimAmount: { color: '#ECBD15', fontSize: 26, fontWeight: '900', marginTop: 2 },
+  claimSub: { color: '#8a8a9a', fontSize: 11, marginTop: 4, maxWidth: 180 },
+  claimBtn: {
+    paddingHorizontal: 18, paddingVertical: 12, borderRadius: 10,
+    backgroundColor: '#ECBD15', marginLeft: 12,
+  },
+  claimBtnDisabled: { backgroundColor: 'rgba(255,255,255,0.1)' },
+  claimBtnText: { color: '#080810', fontSize: 13, fontWeight: '800', letterSpacing: 0.4 },
 
   codeCard: {
     marginHorizontal: 16, padding: 18, borderRadius: 14,

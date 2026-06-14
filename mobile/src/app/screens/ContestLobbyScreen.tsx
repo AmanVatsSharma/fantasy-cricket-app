@@ -192,7 +192,7 @@ const TeamBadge = ({ abbr, color }: { abbr: string; color: string }) => (
 );
 
 // Contest Card component
-const ContestCard = ({ contest }: { contest: typeof MOCK_CONTESTS[0] }) => {
+const ContestCard = ({ contest, onJoin }: { contest: typeof MOCK_CONTESTS[0]; onJoin: (c: any) => void }) => {
   const { show } = useToast();
   const progressColor = contest.filledPct >= 60 ? colors.brand.red :
                        contest.filledPct >= 30 ? colors.brand.gold : '#3F8FFF';
@@ -254,7 +254,7 @@ const ContestCard = ({ contest }: { contest: typeof MOCK_CONTESTS[0] }) => {
       {/* Join button */}
       <TouchableOpacity
         style={styles.joinBtn}
-        onPress={() => show(`Joining ${contest.type} for ₹${contest.entryFee}...`)}
+        onPress={() => onJoin(contest)}
         activeOpacity={0.85}
       >
         <Text style={styles.joinBtnText}>JOIN ₹{contest.entryFee}</Text>
@@ -277,6 +277,7 @@ export const ContestLobbyScreen: React.FC<{ route?: any; navigation?: any }> = (
   const { toast, show } = useToast();
 
   // Get match details from route params or use defaults
+  const matchId = route?.params?.matchId || 'm1';
   const matchName = route?.params?.matchName || 'CHE vs KOL';
   const team1 = route?.params?.team1 || 'CHE';
   const team2 = route?.params?.team2 || 'KOL';
@@ -291,6 +292,26 @@ export const ContestLobbyScreen: React.FC<{ route?: any; navigation?: any }> = (
       navigation.goBack();
     } else {
       show('Cannot go back');
+    }
+  };
+
+  // Called from a contest card's JOIN button. Forwards user to ContestJoin with
+  // the contest + match context preserved in route params.
+  const handleJoin = (contest: any) => {
+    if (navigation?.navigate) {
+      navigation.navigate('ContestJoin', {
+        matchId,
+        matchName,
+        team1,
+        team2,
+        team1Color,
+        team2Color,
+        contestType: contest.type,
+        entryFee: contest.entryFee,
+        prizePool: contest.prizePool,
+        spotsLeft: contest.spotsLeft,
+        totalSpots: contest.totalSpots,
+      });
     }
   };
 
@@ -350,7 +371,7 @@ export const ContestLobbyScreen: React.FC<{ route?: any; navigation?: any }> = (
         <View style={styles.contestList}>
           {contests.map((contest) => (
             <View key={contest.id} style={styles.contestSpacing}>
-              <ContestCard contest={contest} />
+              <ContestCard contest={contest} onJoin={handleJoin} />
             </View>
           ))}
         </View>

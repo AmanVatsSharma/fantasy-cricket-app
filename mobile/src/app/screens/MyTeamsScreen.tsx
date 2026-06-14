@@ -194,14 +194,14 @@ const TeamCard: React.FC<{ team: typeof MOCK_TEAMS[number] }> = ({ team }) => {
         <View style={tc.actions}>
           <TouchableOpacity
             style={tc.actionBtn}
-            onPress={() => show(`Edit team: ${team.name}`)}
+            onPress={() => nav.navigate('EditProfile' as any)}
             activeOpacity={0.7}
           >
             <Text style={tc.actionIcon}>✏️</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={tc.actionBtn}
-            onPress={() => show('Menu: Edit / Copy / Share')}
+            onPress={() => nav.navigate('AITeamSuggestions' as any)}
             activeOpacity={0.7}
           >
             <Text style={tc.actionIcon}>⋮</Text>
@@ -329,13 +329,13 @@ export const MyTeamsScreen: React.FC = () => {
         <EmptySubTab
           message="You haven't joined any contests from this match"
           cta="Browse Contests"
-          onPress={() => show('Browse contests coming soon')}
+          onPress={() => nav.navigate('ContestLobby' as any)}
         />
       ) : (
         <EmptySubTab
           message="No saved teams yet"
           cta="Create Team"
-          onPress={() => show('Create team coming soon')}
+          onPress={() => nav.navigate('AITeamSuggestions' as any)}
         />
       )}
     </View>

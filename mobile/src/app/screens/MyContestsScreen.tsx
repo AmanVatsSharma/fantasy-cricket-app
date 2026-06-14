@@ -165,10 +165,10 @@ const AppHeader: React.FC = () => (
       </View>
     </View>
     <View style={styles.headerRight}>
-      <TouchableOpacity style={styles.iconBtn} onPress={() => null}>
+      <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.navigate('Notifications' as never)}>
         <BellIcon />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.iconBtn} onPress={() => null}>
+      <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.navigate('Account' as never)}>
         <ProfileIcon />
       </TouchableOpacity>
     </View>
@@ -289,8 +289,8 @@ const TeamBadge: React.FC<{ abbr: string; color: string; textColor: string }> = 
   </View>
 );
 
-const ContestCard: React.FC<{ contest: UserContest; onViewTeams: () => void }> = ({ contest, onViewTeams }) => (
-  <View style={styles.contestCard}>
+const ContestCard: React.FC<{ contest: UserContest; onViewTeams: () => void; onContestPress: () => void }> = ({ contest, onViewTeams, onContestPress }) => (
+  <TouchableOpacity style={styles.contestCard} onPress={onContestPress} activeOpacity={0.85}>
     {/* Top row: countdown + teams */}
     <View style={styles.cardTopRow}>
       <View style={styles.timeBlock}>
@@ -340,7 +340,7 @@ const ContestCard: React.FC<{ contest: UserContest; onViewTeams: () => void }> =
     <TouchableOpacity style={styles.viewTeamsBtn} onPress={onViewTeams} activeOpacity={0.85}>
       <Text style={styles.viewTeamsBtnText}>VIEW TEAMS</Text>
     </TouchableOpacity>
-  </View>
+  </TouchableOpacity>
 );
 
 /* ------------------------------------------------------------------ *
@@ -444,7 +444,27 @@ export const MyContestsScreen: React.FC = () => {
     show(`${labels[tab]} coming soon`);
   };
 
-  const handleViewTeams = (matchName: string) => show(`Viewing teams for ${matchName}…`);
+  const handleViewTeams = (matchName: string) => {
+    if (nav?.navigate) {
+      nav.navigate('AITeamSuggestions' as never);
+    }
+  };
+
+  const handleContestPress = (c: UserContest) => {
+    if (nav?.navigate) {
+      nav.navigate('ContestWinningBreakdown' as never, {
+        matchId: c.id,
+        matchName: c.matchName,
+        team1: c.team1.abbr,
+        team2: c.team2.abbr,
+        team1Color: c.team1.color,
+        team2Color: c.team2.color,
+        entryFee: c.entryFee,
+        myTeams: c.myTeams,
+        potentialWin: c.potentialWin,
+      });
+    }
+  };
 
   return (
     <View style={styles.root}>
@@ -494,7 +514,11 @@ export const MyContestsScreen: React.FC = () => {
         ) : (
           visibleContests.map((c) => (
             <View key={c.id} style={styles.contestWrap}>
-              <ContestCard contest={c} onViewTeams={() => handleViewTeams(c.matchName)} />
+              <ContestCard
+                contest={c}
+                onViewTeams={() => handleViewTeams(c.matchName)}
+                onContestPress={() => handleContestPress(c)}
+              />
             </View>
           ))
         )}

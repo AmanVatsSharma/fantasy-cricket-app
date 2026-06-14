@@ -105,9 +105,9 @@ const SECTIONS = [
   {
     title: 'ACCOUNT',
     items: [
-      { icon: <UserIcon />, label: 'Edit Profile', value: 'Aman Vats', action: 'navigate' },
-      { icon: <LockIcon />, label: 'Change Password', action: 'navigate' },
-      { icon: <LockIcon />, label: 'Two-Factor Authentication', value: 'Off', action: 'navigate' },
+      { icon: <UserIcon />, label: 'Edit Profile', value: 'Aman Vats', action: 'navigate', screen: 'EditProfile' },
+      { icon: <LockIcon />, label: 'Change Password', action: 'navigate', screen: 'ForgotPassword' },
+      { icon: <LockIcon />, label: 'Two-Factor Authentication', value: 'Off', action: 'navigate', screen: 'HelpSupport' },
     ],
   },
   {
@@ -122,27 +122,27 @@ const SECTIONS = [
   {
     title: 'PRIVACY & SECURITY',
     items: [
-      { icon: <EyeIcon />, label: 'Profile Visibility', value: 'Public', action: 'navigate' },
-      { icon: <LockIcon />, label: 'Login Activity', action: 'navigate' },
-      { icon: <DocIcon />, label: 'Block List', action: 'navigate' },
+      { icon: <EyeIcon />, label: 'Profile Visibility', value: 'Public', action: 'navigate', screen: 'EditProfile' },
+      { icon: <LockIcon />, label: 'Login Activity', action: 'navigate', screen: 'KYCVerification' },
+      { icon: <DocIcon />, label: 'Block List', action: 'navigate', screen: 'HelpSupport' },
     ],
   },
   {
     title: 'PREFERENCES',
     items: [
       { icon: <MoonIcon />, label: 'Dark Mode', toggle: true, toggleDefault: true },
-      { icon: <GlobeIcon />, label: 'Language', value: 'English', action: 'navigate' },
-      { icon: <GlobeIcon />, label: 'Currency', value: 'INR (₹)', action: 'navigate' },
+      { icon: <GlobeIcon />, label: 'Language', value: 'English', action: 'navigate', screen: 'HelpSupport' },
+      { icon: <GlobeIcon />, label: 'Currency', value: 'INR (₹)', action: 'navigate', screen: 'HelpSupport' },
     ],
   },
   {
     title: 'SUPPORT & LEGAL',
     items: [
-      { icon: <HelpIcon />, label: 'Help Center', action: 'navigate' },
-      { icon: <HelpIcon />, label: 'Contact Support', action: 'navigate' },
-      { icon: <DocIcon />, label: 'Terms of Service', action: 'navigate' },
-      { icon: <DocIcon />, label: 'Privacy Policy', action: 'navigate' },
-      { icon: <DocIcon />, label: 'About App', value: 'v2.4.1', action: 'navigate' },
+      { icon: <HelpIcon />, label: 'Help Center', action: 'navigate', screen: 'HelpSupport' },
+      { icon: <HelpIcon />, label: 'Contact Support', action: 'navigate', screen: 'HelpSupport' },
+      { icon: <DocIcon />, label: 'Terms of Service', action: 'navigate', screen: 'TermsPrivacy' },
+      { icon: <DocIcon />, label: 'Privacy Policy', action: 'navigate', screen: 'TermsPrivacy' },
+      { icon: <DocIcon />, label: 'About App', value: 'v2.4.1', action: 'navigate', screen: 'HelpSupport' },
     ],
   },
 ];
@@ -182,6 +182,11 @@ export const SettingsScreen: React.FC = () => {
                   key={String(i) + item.label}
                   style={[styles.item, i === section.items.length - 1 && styles.itemLast]}
                   activeOpacity={item.toggle ? 1 : 0.7}
+                  onPress={() => {
+                    if (item.action === 'navigate' && (item as any).screen) {
+                      navigation.navigate((item as any).screen as never);
+                    }
+                  }}
                 >
                   <View style={styles.itemLeft}>
                     <View style={styles.itemIconWrap}>{item.icon}</View>

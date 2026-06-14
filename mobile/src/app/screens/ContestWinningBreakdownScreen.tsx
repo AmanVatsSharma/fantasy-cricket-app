@@ -236,6 +236,16 @@ export const ContestWinningBreakdownScreen: React.FC = () => {
                 </View>
               </View>
             ))}
+            <TouchableOpacity
+              style={styles.viewAllWinnersBtn}
+              onPress={() => navigation.navigate('Winners' as never)}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.viewAllWinnersBtnTxt}>VIEW ALL WINNERS</Text>
+              <Svg width={14} height={14} viewBox="0 0 24 24">
+                <Path d="M9 6 L15 12 L9 18" fill="none" stroke="#fff" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />
+              </Svg>
+            </TouchableOpacity>
           </View>
         )}
 
@@ -422,6 +432,23 @@ const styles = StyleSheet.create({
   },
   leaderboardLabel: { color: '#8a8a9a', fontSize: 13 },
   leaderboardValue: { color: '#fff', fontSize: 13, fontWeight: '700' },
+
+  viewAllWinnersBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.brand.red,
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginTop: 14,
+    gap: 8,
+  },
+  viewAllWinnersBtnTxt: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 0.4,
+  },
 });
 
 export default ContestWinningBreakdownScreen;

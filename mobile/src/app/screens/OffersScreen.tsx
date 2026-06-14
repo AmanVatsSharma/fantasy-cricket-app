@@ -145,6 +145,16 @@ export const OffersScreen: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const handleApply = (offer: any) => {
+    if (offer.type === 'referral') {
+      navigation.navigate('RewardsReferral' as never);
+    } else {
+      // Stay on the offers screen and acknowledge the apply
+      setCopiedId(offer.id);
+      setTimeout(() => setCopiedId(null), 1500);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#080810" />
@@ -237,7 +247,7 @@ export const OffersScreen: React.FC = () => {
                   </>
                 )}
               </TouchableOpacity>
-              <TouchableOpacity style={styles.applyBtn}>
+              <TouchableOpacity style={styles.applyBtn} onPress={() => handleApply(offer)}>
                 <Text style={styles.applyBtnText}>Apply</Text>
                 <ArrowRight />
               </TouchableOpacity>

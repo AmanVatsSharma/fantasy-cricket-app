@@ -90,14 +90,48 @@ const NOTIFICATIONS = [
 export const NotificationsScreen: React.FC = () => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState<'all' | 'unread' | 'match' | 'wallet' | 'reward'>('all');
+  const [readState, setReadState] = useState<Record<number, boolean>>(() => {
+    const map: Record<number, boolean> = {};
+    NOTIFICATIONS.forEach((n, i) => { map[i] = n.read; });
+    return map;
+  });
 
   const filtered = NOTIFICATIONS.filter(n => {
+    const isRead = readState[NOTIFICATIONS.indexOf(n)];
     if (activeTab === 'all') return true;
-    if (activeTab === 'unread') return !n.read;
+    if (activeTab === 'unread') return !isRead;
     return n.type === activeTab;
   });
 
-  const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
+  const unreadCount = NOTIFICATIONS.filter((_, i) => !readState[i]).length;
+
+  const handleNotifPress = (n: typeof NOTIFICATIONS[number], idx: number) => {
+    // mark as read
+    setReadState((prev) => ({ ...prev, [idx]: true }));
+    // route based on notification type
+    switch (n.type) {
+      case 'match':
+        navigation.navigate('ContestLobby' as never);
+        break;
+      case 'wallet':
+        navigation.navigate('Wallet' as never);
+        break;
+      case 'reward':
+        navigation.navigate('RewardsReferral' as never);
+        break;
+      default:
+        // No-op
+        break;
+    }
+  };
+
+  const handleMarkAllRead = () => {
+    setReadState((prev) => {
+      const next: Record<number, boolean> = { ...prev };
+      NOTIFICATIONS.forEach((_, i) => { next[i] = true; });
+      return next;
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -156,38 +190,43 @@ export const NotificationsScreen: React.FC = () => {
             {unreadCount > 0 && activeTab === 'all' && (
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionHeaderText}>NEW · {unreadCount} UNREAD</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleMarkAllRead}>
                   <Text style={styles.markAllRead}>Mark all read</Text>
                 </TouchableOpacity>
               </View>
             )}
 
-            {filtered.map((n, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[styles.notificationRow, !n.read && styles.notificationUnread]}
-                activeOpacity={0.7}
-              >
-                <View style={[styles.iconCircle, { backgroundColor: n.color + '22' }]}>
-                  {n.icon}
-                </View>
-                <View style={{ flex: 1 }}>
-                  <View style={styles.titleRow}>
-                    <Text style={[styles.title, !n.read && { fontWeight: '800' }]} numberOfLines={1}>
-                      {n.title}
-                    </Text>
-                    {!n.read && <View style={styles.unreadDot} />}
+            {filtered.map((n) => {
+              const idx = NOTIFICATIONS.indexOf(n);
+              const isRead = readState[idx];
+              return (
+                <TouchableOpacity
+                  key={idx}
+                  style={[styles.notificationRow, !isRead && styles.notificationUnread]}
+                  activeOpacity={0.7}
+                  onPress={() => handleNotifPress(n, idx)}
+                >
+                  <View style={[styles.iconCircle, { backgroundColor: n.color + '22' }]}>
+                    {n.icon}
                   </View>
-                  <Text style={styles.desc} numberOfLines={2}>{n.desc}</Text>
-                  <View style={styles.bottomRow}>
-                    <Text style={styles.time}>{n.time}</Text>
-                    <View style={[styles.cta, { borderColor: n.color + '66' }]}>
-                      <Text style={[styles.ctaText, { color: n.color }]}>{n.cta}</Text>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.titleRow}>
+                      <Text style={[styles.title, !isRead && { fontWeight: '800' }]} numberOfLines={1}>
+                        {n.title}
+                      </Text>
+                      {!isRead && <View style={styles.unreadDot} />}
+                    </View>
+                    <Text style={styles.desc} numberOfLines={2}>{n.desc}</Text>
+                    <View style={styles.bottomRow}>
+                      <Text style={styles.time}>{n.time}</Text>
+                      <View style={[styles.cta, { borderColor: n.color + '66' }]}>
+                        <Text style={[styles.ctaText, { color: n.color }]}>{n.cta}</Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              );
+            })}
           </>
         )}
 

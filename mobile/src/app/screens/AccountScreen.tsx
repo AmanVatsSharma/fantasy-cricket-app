@@ -176,23 +176,23 @@ export const AccountScreen = ({ navigation, drawerOpen }: any) => {
     user.kycStatus === 'verified' ? 'Verified' :
     user.kycStatus === 'pending' ? 'Pending' : null;
 
-  // Quick action config
+  // Quick action config — screen names match Stack.Screen registrations in App.tsx
   const quickActions = [
-    { icon: <InviteIcon />, label: 'Invite & Earn', screen: 'Referrals' },
-    { icon: <ActivityIcon />, label: 'My Activity', screen: 'Leaderboard' },
-    { icon: <TeamsIcon />, label: 'My Teams', screen: 'MyTeamsList' },
-    { icon: <ContestIcon />, label: 'Join Private Contest', screen: 'Clubs' },
+    { icon: <InviteIcon />, label: 'Invite & Earn', screen: 'RewardsReferral' },
+    { icon: <ActivityIcon />, label: 'My Activity', screen: 'Winners' },
+    { icon: <TeamsIcon />, label: 'My Teams', screen: 'MyTeams' },
+    { icon: <ContestIcon />, label: 'Offers & Promos', screen: 'Offers' },
     { icon: <HelpIcon />, label: 'Help & Support', screen: 'HelpSupport' },
   ];
 
-  // Menu list config
+  // Menu list config — screen names match Stack.Screen registrations in App.tsx
   const menuRows = [
     { icon: <KycIcon />, label: 'KYC Verification', sub: 'Verify your identity', badge: kycBadge, screen: 'KYCVerification' },
-    { icon: <PersonIcon />, label: 'Personal Information', sub: 'Manage your personal details', screen: 'Info' },
-    { icon: <HistoryIcon />, label: 'Transaction History', sub: 'View your transactions', screen: 'TransactionDetails' },
-    { icon: <PerformanceIcon />, label: 'My Performance', sub: 'Check your stats and analytics', screen: 'Leaderboard' },
+    { icon: <PersonIcon />, label: 'Personal Information', sub: 'Manage your personal details', screen: 'EditProfile' },
+    { icon: <HistoryIcon />, label: 'Transaction History', sub: 'View your transactions', screen: 'TransactionHistory' },
+    { icon: <PerformanceIcon />, label: 'Bank Accounts', sub: 'Manage linked bank accounts', screen: 'BankAccounts' },
     { icon: <SettingsIcon />, label: 'Settings', sub: 'Manage app settings', screen: 'Settings' },
-    { icon: <PrivacyIcon />, label: 'Privacy & Security', sub: 'Manage privacy and security', screen: 'Settings' },
+    { icon: <PrivacyIcon />, label: 'Privacy & Legal', sub: 'Privacy policy & terms of service', screen: 'TermsPrivacy' },
   ];
 
   return (
@@ -319,14 +319,14 @@ export const AccountScreen = ({ navigation, drawerOpen }: any) => {
           <View style={styles.cashbackActions}>
             <TouchableOpacity
               style={styles.addCashBtn}
-              onPress={() => navigation?.navigate('Wallet')}
+              onPress={() => navigation?.navigate('WalletScreen')}
               activeOpacity={0.8}
             >
               <Text style={styles.addCashBtnTxt}>ADD CASH</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.withdrawBtn}
-              onPress={() => navigation?.navigate('WithdrawalRequest')}
+              onPress={() => navigation?.navigate('TransactionHistory')}
               activeOpacity={0.8}
             >
               <Text style={styles.withdrawBtnTxt}>WITHDRAW</Text>

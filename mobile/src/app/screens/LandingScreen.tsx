@@ -425,6 +425,15 @@ export const LandingScreen: React.FC = () => {
             <SocialButton name="apple" label="Apple" onPress={() => handleSocialTap('apple')} />
             <SocialButton name="email" label="Email" onPress={() => handleSocialTap('email')} />
           </View>
+
+          {/* Forgot password link */}
+          <TouchableOpacity
+            style={styles.forgotLink}
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('ForgotPassword' as never)}
+          >
+            <Text style={styles.forgotLinkTxt}>Forgot password?</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Security footer */}
@@ -772,6 +781,16 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '600',
     marginTop: 6,
+  },
+  forgotLink: {
+    alignSelf: 'center',
+    marginTop: 14,
+    padding: 6,
+  },
+  forgotLinkTxt: {
+    color: colors.brand.red,
+    fontSize: 13,
+    fontWeight: '700',
   },
 
   /* Security bar */

@@ -242,7 +242,7 @@ export const HelpSupportScreen: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.contactCard, { backgroundColor: 'rgba(39,194,138,0.08)' }]}
-            onPress={() => {}}
+            onPress={() => Linking.openURL('https://wa.me/911800123456')}
           >
             <ChatIcon color="#27c28a" />
             <Text style={styles.contactLabel}>Live Chat</Text>
@@ -262,7 +262,7 @@ export const HelpSupportScreen: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.contactCard, { backgroundColor: 'rgba(236,189,21,0.08)' }]}
-            onPress={() => {}}
+            onPress={() => Linking.openURL('mailto:support@11dreamer.app?subject=Raising%20a%20Support%20Ticket')}
           >
             <TicketIcon color="#ECBD15" />
             <Text style={styles.contactLabel}>Raise Ticket</Text>

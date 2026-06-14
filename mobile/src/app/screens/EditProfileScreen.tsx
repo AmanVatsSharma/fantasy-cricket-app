@@ -100,6 +100,7 @@ export const EditProfileScreen: React.FC = () => {
   const [city, setCity] = useState('Mumbai, MH');
   const [bio, setBio] = useState('Cricket fanatic. RCB till I die.');
   const [favoriteTeam, setFavoriteTeam] = useState('MI');
+  const [favoriteFormat, setFavoriteFormat] = useState('T20');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -185,10 +186,10 @@ export const EditProfileScreen: React.FC = () => {
             {['T20', 'ODI', 'Test', 'T10'].map(fmt => (
               <TouchableOpacity
                 key={fmt}
-                onPress={() => {}}
-                style={[styles.teamChip, fmt === 'T20' && styles.teamChipActive]}
+                onPress={() => setFavoriteFormat(fmt)}
+                style={[styles.teamChip, fmt === favoriteFormat && styles.teamChipActive]}
               >
-                <Text style={[styles.teamChipText, fmt === 'T20' && styles.teamChipTextActive]}>{fmt}</Text>
+                <Text style={[styles.teamChipText, fmt === favoriteFormat && styles.teamChipTextActive]}>{fmt}</Text>
               </TouchableOpacity>
             ))}
           </View>
