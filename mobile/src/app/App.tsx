@@ -648,6 +648,20 @@ import { MyTeamsScreen } from './screens/MyTeamsScreen';
 import { ContestLobbyScreen } from './screens/ContestLobbyScreen';
 import { ContestJoinScreen } from './screens/ContestJoinScreen';
 import { WalletScreen } from './screens/WalletScreen';
+import { ContestWinningBreakdownScreen } from './screens/ContestWinningBreakdownScreen';
+import { WinnersScreen } from './screens/WinnersScreen';
+import { KYCVerificationScreen } from './screens/KYCVerificationScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
+import { RewardsReferralScreen } from './screens/RewardsReferralScreen';
+import { NotificationsScreen } from './screens/NotificationsScreen';
+import { OffersScreen } from './screens/OffersScreen';
+import { AITeamSuggestionsScreen } from './screens/AITeamSuggestionsScreen';
+import { ForgotPasswordScreen } from './screens/ForgotPasswordScreen';
+import { EditProfileScreen } from './screens/EditProfileScreen';
+import { TransactionHistoryScreen } from './screens/TransactionHistoryScreen';
+import { BankAccountsScreen } from './screens/BankAccountsScreen';
+import { HelpSupportScreen } from './screens/HelpSupportScreen';
+import { TermsPrivacyScreen } from './screens/TermsPrivacyScreen';
 
 export const App = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -670,6 +684,20 @@ export const App = () => {
           <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
           <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
           <Stack.Screen name="WalletScreen" component={WalletScreen} />
+          <Stack.Screen name="ContestWinningBreakdown" component={ContestWinningBreakdownScreen} />
+          <Stack.Screen name="Winners" component={WinnersScreen} />
+          <Stack.Screen name="KYCVerification" component={KYCVerificationScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="RewardsReferral" component={RewardsReferralScreen} />
+          <Stack.Screen name="Notifications" component={NotificationsScreen} />
+          <Stack.Screen name="Offers" component={OffersScreen} />
+          <Stack.Screen name="AITeamSuggestions" component={AITeamSuggestionsScreen} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+          <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+          <Stack.Screen name="TransactionHistory" component={TransactionHistoryScreen} />
+          <Stack.Screen name="BankAccounts" component={BankAccountsScreen} />
+          <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
+          <Stack.Screen name="TermsPrivacy" component={TermsPrivacyScreen} />
         </Stack.Navigator>
         <SidebarDrawer
           visible={drawerVisible}
