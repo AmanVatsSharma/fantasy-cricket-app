@@ -647,6 +647,7 @@ import { MyContestsScreen } from './screens/MyContestsScreen';
 import { MyTeamsScreen } from './screens/MyTeamsScreen';
 import { ContestLobbyScreen } from './screens/ContestLobbyScreen';
 import { ContestJoinScreen } from './screens/ContestJoinScreen';
+import { WalletScreen } from './screens/WalletScreen';
 
 export const App = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -668,6 +669,7 @@ export const App = () => {
           <Stack.Screen name="MyTeams" component={MyTeamsScreen} />
           <Stack.Screen name="ContestLobby" component={ContestLobbyScreen} />
           <Stack.Screen name="ContestJoin" component={ContestJoinScreen} />
+          <Stack.Screen name="WalletScreen" component={WalletScreen} />
         </Stack.Navigator>
         <SidebarDrawer
           visible={drawerVisible}
@@ -684,7 +686,7 @@ const MainTabs = () => (
     <Tab.Screen name="HOME" component={HomeContent} />
     <Tab.Screen name="MYCONTESTS" component={MyContestsScreen} />
     <Tab.Screen name="MYTEAMS" component={MyTeamsScreen} />
-    <Tab.Screen name="WALLET" component={AccountScreen} />
+    <Tab.Screen name="WALLET" component={WalletScreen} />
     <Tab.Screen
       name="MORE"
       component={() => (

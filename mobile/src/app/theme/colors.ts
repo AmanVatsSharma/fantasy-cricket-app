@@ -20,6 +20,7 @@ export const colors = {
     gold: '#ECBD15',        // accent (countdown, badges)
     green: '#1FA855',       // primary CTA (Continue with Mobile)
     greenLight: '#3DD870',  // CTA highlight
+    digitalGreen: '#0E7C3A', // Go Wallet / digital banking green
   },
 
   surface: {

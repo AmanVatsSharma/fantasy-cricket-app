@@ -185,6 +185,135 @@ const LEADERBOARD = [
 ];
 
 /* ------------------------------------------------------------------ *
+ *  Go Wallet Section
+ * ------------------------------------------------------------------ */
+
+const ACHIEVEMENTS = [
+  { id: 'a1', icon: 'trophy', color: colors.brand.gold, name: 'Top Performer', desc: 'Ranked #1 this week' },
+  { id: 'a2', icon: 'shield2', color: '#9C5BD8', name: 'Streak Master', desc: '5 wins in a row' },
+  { id: 'a3', icon: 'star', color: colors.brand.red, name: 'Rising Star', desc: 'Earned ₹1,00,000+' },
+  { id: 'a4', icon: 'shieldM', color: '#3F8FFF', name: 'Pro Player', desc: 'Completed 100 matches' },
+];
+
+const AchievementsScroll: React.FC = () => (
+  <ScrollView
+    horizontal
+    showsHorizontalScrollIndicator={false}
+    contentContainerStyle={{ gap: 12, paddingRight: 16 }}
+  >
+    {ACHIEVEMENTS.map((a) => (
+      <View key={a.id} style={styles.achievementCard}>
+        <View style={[styles.achievementIcon, { backgroundColor: `${a.color}18`, borderColor: `${a.color}40` }]}>
+          {a.icon === 'trophy' && (
+            <Svg width={28} height={28} viewBox="0 0 24 24">
+              <Path
+                d="M12 3 L15 9 L21 10 L17 15 L18 21 L12 18 L6 21 L7 15 L3 10 L9 9 Z"
+                fill={a.color}
+                opacity="0.3"
+              />
+              <Path
+                d="M12 3 L15 9 L21 10 L17 15 L18 21 L12 18 L6 21 L7 15 L3 10 L9 9 Z"
+                fill="none"
+                stroke={a.color}
+                strokeWidth={1.6}
+                strokeLinejoin="round"
+              />
+            </Svg>
+          )}
+          {a.icon === 'shield2' && (
+            <Svg width={28} height={28} viewBox="0 0 24 24">
+              <Path
+                d="M12 3 L20 6 V13 C20 17 16 20 12 21 C8 20 4 17 4 13 V6 Z"
+                fill={a.color}
+                opacity="0.3"
+              />
+              <Path
+                d="M12 3 L20 6 V13 C20 17 16 20 12 21 C8 20 4 17 4 13 V6 Z"
+                fill="none"
+                stroke={a.color}
+                strokeWidth={1.6}
+                strokeLinejoin="round"
+              />
+              <SvgLetter text="2" color={a.color} x={12} y={15} size={11} />
+            </Svg>
+          )}
+          {a.icon === 'star' && (
+            <Svg width={28} height={28} viewBox="0 0 24 24">
+              <Path
+                d="M12 2 L14.5 8.5 L21 9.5 L16 14.5 L17.5 21.5 L12 18 L6.5 21.5 L8 14.5 L3 9.5 L9.5 8.5 Z"
+                fill={a.color}
+                opacity="0.3"
+              />
+              <Path
+                d="M12 2 L14.5 8.5 L21 9.5 L16 14.5 L17.5 21.5 L12 18 L6.5 21.5 L8 14.5 L3 9.5 L9.5 8.5 Z"
+                fill="none"
+                stroke={a.color}
+                strokeWidth={1.6}
+                strokeLinejoin="round"
+              />
+            </Svg>
+          )}
+          {a.icon === 'shieldM' && (
+            <Svg width={28} height={28} viewBox="0 0 24 24">
+              <Path
+                d="M12 3 L20 6 V13 C20 17 16 20 12 21 C8 20 4 17 4 13 V6 Z"
+                fill={a.color}
+                opacity="0.3"
+              />
+              <Path
+                d="M12 3 L20 6 V13 C20 17 16 20 12 21 C8 20 4 17 4 13 V6 Z"
+                fill="none"
+                stroke={a.color}
+                strokeWidth={1.6}
+                strokeLinejoin="round"
+              />
+              <SvgLetter text="M" color={a.color} x={12} y={15} size={10} />
+            </Svg>
+          )}
+        </View>
+        <Text style={styles.achievementName}>{a.name}</Text>
+        <Text style={styles.achievementDesc}>{a.desc}</Text>
+      </View>
+    ))}
+  </ScrollView>
+);
+
+const GoWalletSection: React.FC = () => {
+  const [walletBalance, setWalletBalance] = useState('12,450');
+
+  return (
+    <View style={{ marginHorizontal: 16, marginBottom: 20 }}>
+      {/* Go Wallet Banner */}
+      <TouchableOpacity
+        style={styles.goWalletCard}
+        activeOpacity={0.85}
+        onPress={() => {/* Navigate to wallet */}}
+      >
+        <View style={styles.goWalletChip}>
+          <Text style={styles.goWalletChipText}>GO Wallet</Text>
+          <Svg width={10} height={10} viewBox="0 0 24 24">
+            <Path d="M6 9 L12 15 L18 9" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+          </Svg>
+        </View>
+        <View style={styles.goWalletLeft}>
+          <Text style={styles.goWalletTitle}>GO Wallet</Text>
+          <Text style={styles.goWalletSubtitle}>
+            Balance <Text style={{ color: '#fff', fontWeight: '800' }}>₹{walletBalance}</Text>
+          </Text>
+        </View>
+        <View style={styles.goWalletRight}>
+          <WalletIcon />
+        </View>
+      </TouchableOpacity>
+
+      {/* Achievements Scroll */}
+      <Text style={[styles.sectionTitle, { marginBottom: 12, marginTop: 4 }]}>My Achievements</Text>
+      <AchievementsScroll />
+    </View>
+  );
+};
+
+/* ------------------------------------------------------------------ *
  *  Sub-components
  * ------------------------------------------------------------------ */
 
@@ -238,11 +367,24 @@ const BasketballIcon: React.FC<{ size?: number; color?: string }> = ({ size = 16
   </Svg>
 );
 
+const GameCardIcon: React.FC<{ size?: number; color?: string }> = ({ size = 16, color = colors.text.muted }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24">
+    <Rect x={3} y={5} width={18} height={14} rx={3} fill="none" stroke={color} strokeWidth={1.6} />
+    <Path d="M12 8 V16 M8 10 V14 M16 10 V14 M10 8 V10 M14 8 V10" stroke={color} strokeWidth={1.4} strokeLinecap="round" />
+  </Svg>
+);
+
 const KabaddiIcon: React.FC<{ size?: number; color?: string }> = ({ size = 16, color = colors.text.muted }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24">
     <Circle cx={12} cy={6} r={2.4} fill="none" stroke={color} strokeWidth={1.6} />
-    <Path d="M5 22 C5 17 7 13 12 13 C17 13 19 17 19 22" fill="none" stroke={color} strokeWidth={1.6} strokeLinecap="round" />
-    <Path d="M9 13 L11 18 L13 13" fill="none" stroke={color} strokeWidth={1.4} strokeLinejoin="round" />
+    <Path
+      d="M6 21 C6 15 8 13 12 13 C16 13 18 15 18 21"
+      fill="none"
+      stroke={color}
+      strokeWidth={1.6}
+    />
+    <Path d="M8 17 H16" stroke={color} strokeWidth={1.4} strokeLinecap="round" />
+    <Path d="M12 13 L12 10" stroke={color} strokeWidth={1.4} strokeLinecap="round" />
   </Svg>
 );
 
@@ -449,6 +591,40 @@ const SvgLetter: React.FC<{ text: string; color: string; x: number; y: number; s
   >
     {text}
   </SvgText>
+);
+
+const WalletIcon: React.FC<{ color?: string }> = ({ color = colors.brand.digitalGreen }) => (
+  <Svg width={32} height={32} viewBox="0 0 24 24">
+    <Path
+      d="M3 6 C3 4.5 4 3.5 5.5 3.5 H18.5 C20 3.5 21 4.5 21 6 V8 H5.5 C4 8 3 7 3 6 Z"
+      fill="#FFFFFF"
+      opacity="0.95"
+    />
+    <Path
+      d="M3 8 H21 V18 C21 19.5 20 20.5 18.5 20.5 H5.5 C4 20.5 3 19.5 3 18 V8 Z"
+      fill="#FFFFFF"
+      opacity="0.95"
+    />
+    <Rect x="13" y="11" width="8" height="5" rx="1" fill={color} />
+    <Circle cx="18.5" cy="13.5" r="1" fill="#FFFFFF" />
+  </Svg>
+);
+
+const AchievementIcon: React.FC<{ color?: string }> = ({ color = colors.brand.gold }) => (
+  <Svg width={40} height={40} viewBox="0 0 48 48">
+    <Path
+      d="M24 4 L32 10 L32 20 C32 25 28 30 24 32 C20 30 16 25 16 20 L16 10 Z"
+      fill={color}
+      stroke={color}
+      strokeWidth={2}
+      strokeLinejoin="round"
+    />
+    <Circle cx={24} cy={16} r={5} fill="#FFFFFF" />
+    <Path
+      d="M24 13 L25 15.5 L27.5 15.5 L25.5 17.2 L26.2 19.5 L24 18.2 L21.8 19.5 L22.5 17.2 L20.5 15.5 L23 15.5 Z"
+      fill={color}
+    />
+  </Svg>
 );
 
 const WhyIcon: React.FC<{ kind: string; color: string; size?: number }> = ({ kind, color, size = 28 }) => {
@@ -779,6 +955,11 @@ export const HomeScreen: React.FC = () => {
           })}
         </ScrollView>
 
+        {/* Go Wallet + Achievements */}
+        <View style={{ marginTop: 20 }}>
+          <GoWalletSection />
+        </View>
+
         {/* Hero carousel */}
         <View style={styles.heroWrap}>
           <ScrollView
@@ -944,7 +1125,7 @@ export const HomeScreen: React.FC = () => {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Popular Tournaments</Text>
             <TouchableOpacity activeOpacity={0.7} onPress={() => show('Tournaments: coming soon')}>
-              <Text style={styles.viewAll}>View All</Text>
+              <Text style={styles.sectionLink}>View All</Text>
             </TouchableOpacity>
           </View>
           <ScrollView
@@ -1018,7 +1199,7 @@ export const HomeScreen: React.FC = () => {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Live Leaderboard</Text>
             <TouchableOpacity activeOpacity={0.7} onPress={() => show('Leaderboard: full list coming soon')}>
-              <Text style={styles.viewAll}>View All</Text>
+              <Text style={styles.sectionLink}>View All</Text>
             </TouchableOpacity>
           </View>
           {LEADERBOARD.map((l) => (
@@ -1327,6 +1508,69 @@ const styles = StyleSheet.create({
   dot: {
     height: 6,
     borderRadius: 3,
+  },
+
+  /* Go Wallet */
+  goWalletCard: {
+    backgroundColor: colors.brand.digitalGreen,
+    borderRadius: 20,
+    padding: 18,
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  goWalletChip: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  goWalletChipText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  goWalletChipIcon: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  goWalletLeft: {
+    flex: 1,
+    zIndex: 1,
+  },
+  goWalletTitle: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 0.3,
+  },
+  goWalletSubtitle: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 10.5,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  goWalletRight: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 12,
   },
 
   /* Section */
@@ -1732,6 +1976,56 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.08)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  /* Go Wallet */
+  /* Achievements */
+  achievementsRow: {
+    gap: 12,
+    paddingRight: 16,
+  },
+  achievementCard: {
+    width: 130,
+    backgroundColor: colors.surface.panel,
+    borderRadius: 16,
+    padding: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border.subtle,
+  },
+  achievementIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  achievementName: {
+    color: colors.text.primary,
+    fontSize: 11,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: 2,
+  },
+  achievementDesc: {
+    color: colors.text.muted,
+    fontSize: 9,
+    fontWeight: '600',
+    textAlign: 'center',
+    lineHeight: 13,
+  },
+
+  /* Tournament Images Placeholder */
+  tournamentImagePlaceholder: {
+    width: '100%',
+    height: 70,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 6,
   },
 
   /* Toast (custom rendering to keep on top of tabs) */
